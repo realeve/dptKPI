@@ -24,6 +24,7 @@
     "iview-area": "^1.5.12",
     "js-cookie": "^2.2.0",
     "particles.js": "^2.0.0",
+    "qs": "^6.5.1",
     "sortablejs": "^1.7.0",
     "vue": "^2.5.9",
     "vue-router": "^3.0.1",

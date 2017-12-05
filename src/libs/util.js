@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import env from '../../build/env';
 import semver from 'semver';
 import packjson from '../../package.json';
@@ -11,16 +11,21 @@ util.title = function(title) {
     window.document.title = title;
 };
 
+const domain = 'http://localhost:8080';
+
 const ajaxUrl = env === 'development' ?
-    'http://127.0.0.1:8888' :
+    'http://localhost:90/api/' :
     env === 'production' ?
-    'https://www.url.com' :
+    domain :
     'https://debug.url.com';
 
-util.ajax = axios.create({
-    baseURL: ajaxUrl,
-    timeout: 30000
-});
+util.domain = domain;
+util.ajaxUrl = ajaxUrl;
+
+// util.ajax = axios.create({
+//     baseURL: ajaxUrl,
+//     timeout: 30000
+// });
 
 util.inOf = function(arr, targetArr) {
     let res = true;

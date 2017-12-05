@@ -55,9 +55,9 @@
           <router-view></router-view>
         </keep-alive>
       </div>
-      <div class="main-copy">
+      <!-- <div class="main-copy">
         Copyright © 2018 CBPC 版权所有
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -70,6 +70,8 @@ import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import themeSwitch from "./main-components/theme-switch/theme-switch.vue";
 import Cookies from "js-cookie";
 import util from "@/libs/util.js";
+
+import { loadUserInfo } from "../libs/axios";
 
 export default {
   components: {
@@ -118,7 +120,23 @@ export default {
       if (pathArr.length >= 2) {
         this.$store.commit("addOpenSubmenu", pathArr[1].name);
       }
-      this.userName = Cookies.get("user");
+      let user = loadUserInfo();
+      // console.log(user);
+      this.$store.commit("setUserInfo", {
+        key: "uid",
+        value: user.uid
+      });
+      this.$store.commit("setUserInfo", {
+        key: "name",
+        value: user.name
+      });
+      this.$store.commit("setUserInfo", {
+        key: "fullname",
+        value: user.fullname
+      });
+
+      this.userName = this.$store.state.user.fullname;
+      // this.userName = Cookies.get("user");
 
       this.checkTag(this.$route.name);
     },

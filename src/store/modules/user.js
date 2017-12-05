@@ -1,11 +1,14 @@
 import Cookies from 'js-cookie';
 
 const user = {
-    state: {},
+    state: {
+        uid: 0,
+        name: '',
+        fullname: ''
+    },
     mutations: {
-        logout (state, vm) {
+        logout(state, vm) {
             Cookies.remove('user');
-            Cookies.remove('password');
             Cookies.remove('access');
             // 恢复默认样式
             let themeLink = document.querySelector('link[name="theme"]');
@@ -19,6 +22,9 @@ const user = {
             if (theme) {
                 localStorage.theme = theme;
             }
+        },
+        setUserInfo(state, data) {
+            state[data.key] = data.value;
         }
     }
 };

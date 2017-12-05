@@ -76,7 +76,8 @@ export const appRouter = [{
         children: [
             { path: 'dept', title: '部门管理', name: 'setting_dept', access: 0, component: resolve => { require(['@/views/base-setting/dept.vue'], resolve); } },
             { path: 'user', title: '用户管理', name: 'setting_user', access: 0, component: resolve => { require(['@/views/base-setting/user.vue'], resolve); } },
-            { path: 'score', title: '评分标准', name: 'setting_score', access: 0, component: resolve => { require(['@/views/base-setting/score.vue'], resolve); } }
+            { path: 'score', title: '评分标准', name: 'setting_score', access: 0, component: resolve => { require(['@/views/base-setting/score.vue'], resolve); } },
+            { path: 'task', title: '任务管理', name: 'setting_task', access: 0, component: resolve => { require(['@/views/base-setting/task.vue'], resolve); } }
         ]
     }
 ];
