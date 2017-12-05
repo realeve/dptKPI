@@ -55,6 +55,9 @@
           <router-view></router-view>
         </keep-alive>
       </div>
+      <div class="main-copy">
+        Copyright © 2018 CBPC 版权所有
+      </div>
     </div>
   </div>
 </template>
