@@ -83,7 +83,7 @@ export default {
             value: userInfo.extra.uid
           });
 
-          Cookies.set("user", this.form.userName);
+          // Cookies.set("user", this.form.userName);
 
           if (this.form.userName === "develop") {
             Cookies.set("access", 0);

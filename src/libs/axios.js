@@ -13,6 +13,21 @@ export let login = async(user, psw) => {
     return token;
 }
 
+export let getUser = () => {
+    let user = window.localStorage.getItem('user');
+    if (user == null) {
+        user = {
+            token: '',
+            uid: '',
+            name: '',
+            fullname: ''
+        };
+    } else {
+        user = JSON.parse(user);
+    }
+    return user;
+}
+
 let handleToken = (token, userInfo = false) => {
     let user = { token };
     let extraInfo = atob(user.token.split('.')[1]);
@@ -22,8 +37,7 @@ let handleToken = (token, userInfo = false) => {
         user.fullname = userInfo.fullname;
         user.name = userInfo.name;
     } else {
-        let info = window.localStorage.getItem('user');
-        let data = JSON.parse(info);
+        let data = getUser();
         user.fullname = data.fullname;
         user.name = data.name;
     }
