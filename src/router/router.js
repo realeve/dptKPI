@@ -71,7 +71,7 @@ export const appRouter = [{
         path: '/setting',
         icon: 'settings',
         title: '系统设置',
-        name: 'accesstest',
+        name: 'setting',
         access: 0,
         component: Main,
         children: [
@@ -79,6 +79,17 @@ export const appRouter = [{
             { path: 'user', title: '用户管理', name: 'setting_user', access: 0, component: resolve => { require(['@/views/base-setting/user.vue'], resolve); } },
             { path: 'standard', title: '评分标准', name: 'setting_standard', access: 0, component: resolve => { require(['@/views/base-setting/standard.vue'], resolve); } },
             { path: 'task', title: '任务管理', name: 'setting_task', access: 0, component: resolve => { require(['@/views/base-setting/task.vue'], resolve); } }
+        ]
+    },
+    {
+        path: '/perform',
+        icon: 'arrow-graph-up-right',
+        title: '评分',
+        name: 'perform',
+        component: Main,
+        children: [
+            { path: 'paper', title: '部门评分', name: 'perform_paper', component: resolve => { require(['@/views/perform/paper'], resolve); } },
+            { path: 'static', title: '评分统计', name: 'perform_static', component: resolve => { require(['@/views/perform/paper'], resolve); } }
         ]
     }
 ];
