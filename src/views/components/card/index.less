@@ -1,0 +1,65 @@
+@white: #fafafa;
+@text-color: #333;
+@subtext-color: #555;
+.card {
+    background: #fff;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    margin: 30px 0px 10px 0px;
+    &:hover {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+        border-color: #eee;
+        transform: translate(1px, 1px);
+    }
+    &-header {
+        font-size: 1.4em;
+        border-radius: 3px;
+        font-weight: 100;
+        border-bottom: 1px solid #e6e6e6;
+        background: rgba(0, 0, 0, 0.003);
+        .depart {
+            font-size: .7em;
+        }
+        padding:10px;
+        color:@white;
+        background-color:#445;
+        display: flex;
+        justify-content: space-between;
+        .ivu-btn-ghost {
+            color: @white;
+        }
+    }
+    &-content {
+        padding: 10px 15px;
+        .desc {
+            color: @subtext-color;
+            font-size: .95em;
+            border-top: 1px solid #e6e6e6;
+            padding-top: 5px;
+            margin: 0;
+        }
+    }
+    .warnning {
+        color: #f44;
+        font-weight: bold;
+    }
+    .content {
+        color: #777;
+        padding: 10px 0 20px 0;
+        min-height: 90px;
+        &:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6, 0 9px 1px -3px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            line-height: 1.5em;
+        }
+    }
+}
