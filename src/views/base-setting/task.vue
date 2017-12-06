@@ -32,7 +32,10 @@
           <p>领导权重：{{item.ratio_leader}}</p>
           <p>用户权重：{{item.ratio_user}}</p>
         </div>
-        <div slot="footer ">领导：{{item.complete_leader}} / {{item.count_leader}} 用户：{{item.complete_user}} / {{item.count_user}} </div>
+        <div slot="footer">
+          <p>领导：{{item.complete_leader}} / {{item.count_leader}} </p>
+          <p>用户：{{item.complete_user}} / {{item.count_user}}</p>
+        </div>
       </v-card>
       </Col>
     </Row>

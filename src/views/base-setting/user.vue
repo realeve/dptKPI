@@ -4,6 +4,17 @@
       <Icon type="person"></Icon>
       用户管理</p>
     <Row class="margin-top-10" :gutter="20">
+
+      <Col span="6" class="margin-top-20 user-card">
+      <Card>
+        <p slot="title">添加用户
+        </p>
+        <div class="ivu-upload ivu-upload-drag" @click="editUser()">
+          <Icon type="ios-plus-empty" size="52" style="color: #3399ff" class="padding-top-15 padding-bottom-15"></Icon>
+        </div>
+      </Card>
+      </Col>
+
       <Col span="6" v-for="(item,i) in userList" :key="i" class="margin-top-20 user-card">
       <Card>
         <p slot="title">{{item.username}}
@@ -34,7 +45,7 @@
       </Card>
       </Col>
     </Row>
-    <Modal v-model="modal" title="'编辑用户'+curUser.username+'权限信息'" @on-ok="edit">
+    <Modal v-model="modal" :title="modalTitle" @on-ok="edit">
       <Form :vmodel="curUser" :label-width="80">
         <FormItem label="部门名称">
           <Input v-model="curUser.dept" placeholder="请输入部门名称"></Input>
@@ -70,12 +81,13 @@ export default {
   data() {
     return {
       modal: false,
+      curIdx: 0,
       curUser: {
         username: "张三",
         dept: "xx部",
         type: "2",
         ratio: 1,
-        status: 1
+        status: true
       },
       userList: [
         {
@@ -83,75 +95,54 @@ export default {
           dept: "xx部",
           type: "2",
           ratio: 1,
-          status: 1
+          status: true
         },
         {
           username: "张三",
           dept: "xx部",
           type: "2",
           ratio: 1,
-          status: 1
+          status: true
         },
         {
           username: "张三",
           dept: "xx部",
           type: "2",
           ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
-        },
-        {
-          username: "张三",
-          dept: "xx部",
-          type: "2",
-          ratio: 1,
-          status: 1
+          status: true
         }
       ]
     };
   },
+  computed: {
+    modalTitle() {
+      return this.curIdx > -1
+        ? "编辑【" + this.curUser.username + "】个人信息"
+        : "新建用户";
+    }
+  },
   methods: {
-    editUser(idx) {
-      console.log(this.userList[idx]);
+    editUser(idx = -1) {
+      this.modal = true;
+      this.curIdx = idx;
+      if (idx == -1) {
+        this.addNew();
+        return;
+      }
+      this.curUser = this.userList[idx];
       this.$Notice.open({
         title: "用户编辑",
         desc: `调整第${idx}个用户的信息`
       });
-      this.modal = true;
+    },
+    addNew() {
+      this.curUser = {
+        username: "",
+        dept: 0,
+        type: 0,
+        ratio: 0,
+        status: false
+      };
     },
     edit() {
       this.$Notice.open({
