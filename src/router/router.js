@@ -51,6 +51,7 @@ export const otherRouter = {
     component: Main,
     children: [
         { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: resolve => { require(['@/views/home/home.vue'], resolve); } },
+        { path: 'setting/standard/:id', title: '评分细则', name: 'setting_score', access: 0, component: resolve => { require(['@/views/base-setting/score.vue'], resolve); } },
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => { require(['@/views/own-space/own-space.vue'], resolve); } },
     ]
 };
@@ -76,7 +77,7 @@ export const appRouter = [{
         children: [
             { path: 'dept', title: '部门管理', name: 'setting_dept', access: 0, component: resolve => { require(['@/views/base-setting/dept.vue'], resolve); } },
             { path: 'user', title: '用户管理', name: 'setting_user', access: 0, component: resolve => { require(['@/views/base-setting/user.vue'], resolve); } },
-            { path: 'score', title: '评分标准', name: 'setting_score', access: 0, component: resolve => { require(['@/views/base-setting/score.vue'], resolve); } },
+            { path: 'standard', title: '评分标准', name: 'setting_standard', access: 0, component: resolve => { require(['@/views/base-setting/standard.vue'], resolve); } },
             { path: 'task', title: '任务管理', name: 'setting_task', access: 0, component: resolve => { require(['@/views/base-setting/task.vue'], resolve); } }
         ]
     }

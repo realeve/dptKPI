@@ -3,6 +3,12 @@
     <p slot="title">
       <Icon type="calculator"></Icon>
       评分标准</p>
+    <Button type="warning" slot="extra" @click.prevent="addNew">
+      <Icon type="ios-plus-empty"></Icon>
+      新增评分项</Button>
+    <!-- <a href="#" >
+      
+    </a> -->
 
     <Card class="margin-top-20" v-for="(item,i) in standardList" :key="i">
       <p slot="title">
@@ -42,6 +48,12 @@ export default {
     },
     getChar(code) {
       return String.fromCharCode(code);
+    },
+    addNew() {
+      this.$Notice.open({
+        title: "add standard",
+        desc: `调整第个标准的信息`
+      });
     },
     edit(idx) {
       this.$Notice.open({

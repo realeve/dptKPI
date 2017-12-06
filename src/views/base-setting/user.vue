@@ -9,7 +9,7 @@
       <Card>
         <p slot="title">添加用户
         </p>
-        <div class="ivu-upload ivu-upload-drag" @click="editUser()">
+        <div class="ivu-upload ivu-upload-drag" @click="addNew">
           <Icon type="ios-plus-empty" size="52" style="color: #3399ff" class="padding-top-15 padding-bottom-15"></Icon>
         </div>
       </Card>
@@ -122,13 +122,9 @@ export default {
     }
   },
   methods: {
-    editUser(idx = -1) {
+    editUser(idx) {
       this.modal = true;
       this.curIdx = idx;
-      if (idx == -1) {
-        this.addNew();
-        return;
-      }
       this.curUser = this.userList[idx];
       this.$Notice.open({
         title: "用户编辑",
@@ -136,6 +132,8 @@ export default {
       });
     },
     addNew() {
+      this.modal = true;
+      this.curIdx = -1;
       this.curUser = {
         username: "",
         dept: 0,
