@@ -2,6 +2,10 @@ import http from 'axios';
 import qs from 'qs';
 import util from './util';
 
+// 将API配置导出
+export { default as API }
+from './api';
+
 export let login = async(user, psw) => {
     // let refUrl = location.href.split('?')[0].split('#')[0];
     // 此时可将引用url链接作为 url 参数请求登录，作为强校验；

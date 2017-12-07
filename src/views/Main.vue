@@ -24,6 +24,7 @@
           </div>
         </div>
         <div class="header-avator-con">
+          <zoom-window></zoom-window>
           <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
           <lock-screen></lock-screen>
           <theme-switch></theme-switch>
@@ -68,6 +69,7 @@ import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
 import fullScreen from "./main-components/fullscreen.vue";
 import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import themeSwitch from "./main-components/theme-switch/theme-switch.vue";
+import zoomWindow from "./main-components/zoom";
 // import Cookies from "js-cookie";s
 import util from "@/libs/util.js";
 
@@ -80,7 +82,8 @@ export default {
     breadcrumbNav,
     fullScreen,
     lockScreen,
-    themeSwitch
+    themeSwitch,
+    zoomWindow
   },
   data() {
     return {

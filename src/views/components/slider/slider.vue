@@ -31,10 +31,10 @@
 </template>
 <script>
 import InputNumber from "iview/src/components/input-number/input-number.vue";
-import Tooltip from "iview/src/components/tooltip/tooltip.vue";
 import { getStyle, oneOf } from "iview/src/utils/assist";
 import { on, off } from "iview/src/utils/dom";
 import Emitter from "iview/src/mixins/emitter";
+import Tooltip from "./tooltip.vue";
 
 const prefixCls = "ivu-slider";
 

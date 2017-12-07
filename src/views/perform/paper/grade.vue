@@ -21,7 +21,7 @@
             </Col>
           </Row>
           <FormItem label="总分">
-            <v-slider v-model="autoScore" :show-stops="true" :user-stops="[80,90,95]" :show-input="true" @on-change="autoCalcScore"></v-slider>
+            <v-slider v-model="autoScore" :show-stops="true" :user-stops="[70,80,90]" :show-input="true" @on-change="autoCalcScore"></v-slider>
           </FormItem>
           <Progress :percent="parseInt(15*100/23)" :stroke-width="1" hide-info></Progress>
 

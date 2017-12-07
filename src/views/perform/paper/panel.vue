@@ -1,9 +1,9 @@
 <template>
 
   <Card shadow>
-    <h3 slot="title">
+    <p slot="title">
       <Icon type="stats-bars"></Icon>
-      企业文化部</h3>
+      企业文化部</p>
     <div class="content">
       <p class="leader">主管领导：时延风</p>
 
@@ -12,8 +12,8 @@
         <span>尹放</span>
       </p>
       <div class="score">
-        <p>历史平均得分：72.33</p>
-        <p>历史平均排名：4</p>
+        <p>近期平均得分：72.33</p>
+        <p>近期平均排名：4</p>
       </div>
     </div>
   </Card>
@@ -24,7 +24,6 @@ export default {};
 
 <style lang="less" scoped>
 .content {
-  font-size: 12pt;
   p {
     line-height: 30px;
   }
