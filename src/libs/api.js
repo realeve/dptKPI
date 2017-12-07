@@ -5,7 +5,9 @@ let staticPath = util.domain + '/static/data/';
 let CACHE_MAX = 60 * 24 * 60;
 
 let MANAGE = {
+    // 评分标准
     standard: staticPath + 'standard.json',
+    // 用户管理
     userTypeList: {
         id: 4,
         nonce: 'dc2861d656',
@@ -20,6 +22,18 @@ let MANAGE = {
         id: 6,
         nonce: 'f150045a94',
         cache: 0
+    },
+
+    // 部门管理
+    depts: {
+        id: 7,
+        nonce: '6f77963c65',
+        cache: '0'
+    },
+    leaderList: {
+        id: 8,
+        nonce: '719f24df9c',
+        cache: CACHE_MAX
     }
 };
 

@@ -80,6 +80,7 @@
 <script>
 import { axios, API } from "../../libs/axios";
 import pinyin from "../../libs/pinyin";
+import _ from "lodash";
 
 let MANAGE = API.MANAGE;
 
@@ -177,14 +178,15 @@ export default {
       }).then(res => {
         this.$Notice.open({
           title: "系统提示",
-          desc: "数据成功添加"
+          desc: "提交成功"
         });
         this.loadUserList();
       });
     },
     loadUserList: async function() {
-      let data = await axios({ params: MANAGE.userList }).then(res => res.data);
-      this.userList = data;
+      this.userList = await axios({ params: MANAGE.userList }).then(
+        res => res.data
+      );
     },
     loadInitSetting: async function() {
       this.userTypeList = await axios({ params: MANAGE.userTypeList }).then(
