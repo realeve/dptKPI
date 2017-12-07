@@ -1,33 +1,33 @@
 <template>
-    <div :class="classes">
-        <Input-number v-if="!range && showInput" :min="min" :max="max" :step="step" :value="currentValue" :disabled="disabled" @on-change="handleInputChange"></Input-number>
-        <div :class="[prefixCls + '-wrap']" ref="slider" @click.self="sliderClick">
-            <input type="hidden" :name="name" :value="currentValue">
-            <template v-if="showStops">
-                <div :class="[prefixCls + '-stop']" v-for="item in stops" :style="{ 'left': item + '%' }" @click.self="sliderClick"></div>
-            </template>
-            <div :class="[prefixCls + '-bar']" :style="barStyle" @click.self="sliderClick"></div>
-            <template v-if="range">
-                <div :class="[prefixCls + '-button-wrap']" :style="{left: firstPosition + '%'}" @mousedown="onFirstButtonDown">
-                    <Tooltip :controlled="firstDragging" placement="top" :content="tipFormat(currentValue[0])" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip">
-                        <div :class="button1Classes"></div>
-                    </Tooltip>
-                </div>
-                <div :class="[prefixCls + '-button-wrap']" :style="{left: secondPosition + '%'}" @mousedown="onSecondButtonDown">
-                    <Tooltip :controlled="secondDragging" placement="top" :content="tipFormat(currentValue[1])" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip2">
-                        <div :class="button2Classes"></div>
-                    </Tooltip>
-                </div>
-            </template>
-            <template v-else>
-                <div :class="[prefixCls + '-button-wrap']" :style="{left: singlePosition + '%'}" @mousedown="onSingleButtonDown">
-                    <Tooltip :controlled="dragging" placement="top" :content="tipFormat(currentValue)" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip">
-                        <div :class="buttonClasses"></div>
-                    </Tooltip>
-                </div>
-            </template>
+  <div :class="classes">
+    <Input-number v-if="!range && showInput" :min="min" :max="max" :step="step" :value="currentValue" :disabled="disabled" @on-change="handleInputChange"></Input-number>
+    <div :class="[prefixCls + '-wrap']" ref="slider" @click.self="sliderClick">
+      <input type="hidden" :name="name" :value="currentValue">
+      <template v-if="showStops">
+        <div :class="[prefixCls + '-stop']" v-for="item in curStops" :style="{ 'left': item + '%' }" @click.self="sliderClick"></div>
+      </template>
+      <div :class="[prefixCls + '-bar']" :style="barStyle" @click.self="sliderClick"></div>
+      <template v-if="range">
+        <div :class="[prefixCls + '-button-wrap']" :style="{left: firstPosition + '%'}" @mousedown="onFirstButtonDown">
+          <Tooltip :controlled="firstDragging" placement="top" :content="tipFormat(currentValue[0])" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip">
+            <div :class="button1Classes"></div>
+          </Tooltip>
         </div>
+        <div :class="[prefixCls + '-button-wrap']" :style="{left: secondPosition + '%'}" @mousedown="onSecondButtonDown">
+          <Tooltip :controlled="secondDragging" placement="top" :content="tipFormat(currentValue[1])" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip2">
+            <div :class="button2Classes"></div>
+          </Tooltip>
+        </div>
+      </template>
+      <template v-else>
+        <div :class="[prefixCls + '-button-wrap']" :style="{left: singlePosition + '%'}" @mousedown="onSingleButtonDown">
+          <Tooltip :controlled="dragging" @on-popper-show="showPoper" placement="top" :content="tipFormat(currentValue)" :disabled="tipDisabled" :always="showTip === 'always'" ref="tooltip">
+            <div :class="buttonClasses" :style="{borderColor:backgroundColor}"></div>
+          </Tooltip>
+        </div>
+      </template>
     </div>
+  </div>
 </template>
 <script>
 import InputNumber from "iview/src/components/input-number/input-number.vue";
@@ -75,6 +75,12 @@ export default {
       type: Boolean,
       default: false
     },
+    userStops: {
+      type: Array,
+      default() {
+        return [];
+      }
+    },
     tipFormat: {
       type: Function,
       default(val) {
@@ -108,7 +114,8 @@ export default {
       oldSecondValue: this.value[1],
       singlePosition: (this.value - this.min) / (this.max - this.min) * 100,
       firstPosition: (this.value[0] - this.min) / (this.max - this.min) * 100,
-      secondPosition: (this.value[1] - this.min) / (this.max - this.min) * 100
+      secondPosition: (this.value[1] - this.min) / (this.max - this.min) * 100,
+      colorList: ["#ed3f14", "#ff9900", "#57a3f3", "#19be6b"]
     };
   },
   watch: {
@@ -128,6 +135,26 @@ export default {
     }
   },
   computed: {
+    curStops() {
+      if (this.userStops.length == 0) {
+        return this.stops;
+      }
+      let ratio = 100 / (this.max - this.min);
+      return this.userStops.map(item => Math.floor(item * ratio));
+    },
+    backgroundColor() {
+      let curVal = this.currentValue;
+      let flag = true;
+      let i = 0;
+      while (flag && i < this.userStops.length) {
+        if (curVal <= this.userStops[i]) {
+          flag = false;
+          break;
+        }
+        i++;
+      }
+      return this.colorList[i];
+    },
     classes() {
       return [
         `${prefixCls}`,
@@ -182,7 +209,7 @@ export default {
             (this.currentValue - this.min) / (this.max - this.min) * 100 + "%"
         };
       }
-
+      style.background = this.backgroundColor;
       return style;
     },
     stops() {
@@ -192,6 +219,7 @@ export default {
       for (let i = 1; i < stopCount; i++) {
         result.push(i * stepWidth);
       }
+      console.log(result);
       return result;
     },
     sliderWidth() {
@@ -205,6 +233,9 @@ export default {
     }
   },
   methods: {
+    showPoper() {
+      this.$emit("on-hover", this.currentValue);
+    },
     updateValue(val, init = false) {
       if (this.range) {
         let value = [...val];

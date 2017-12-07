@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../styles/common.less";
+// @import "../../styles/common.less";
 // .standard-wrapper {
 //   max-width: 80%;
 //   margin: 0 auto;
