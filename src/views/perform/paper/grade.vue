@@ -7,7 +7,7 @@
     <Card>
       <p slot="title">
         <Icon type="ios-paper-outline"></Icon>
-        部门1</p>
+        {{formItem.dept}}</p>
       <p slot="extra">
         <span class="text-primary text-bold">{{subScore}}</span> 分，第
         <span class="text-error text-bold">7</span> 名</p>
@@ -23,8 +23,16 @@
           <FormItem label="总分">
             <v-slider v-model="autoScore" :show-stops="true" :user-stops="[80,90,95]" :show-input="true" @on-change="autoCalcScore"></v-slider>
           </FormItem>
+          <Progress :percent="parseInt(15*100/23)" :stroke-width="1" hide-info></Progress>
+
           <div class="actions">
-            <Button type="primary" class="margin-right-30">提交</Button>
+            <div class="info">
+              <p>评分进度：15/23</p>
+              <p>下一部门：XX部</p>
+            </div>
+            <div>
+              <Button type="primary" class="margin-right-30" @click="submit">提交</Button>
+            </div>
           </div>
         </Form>
       </div>
@@ -44,10 +52,12 @@ export default {
     return {
       standardList: [],
       formItem: {
-        score: [0, 0, 0, 0]
+        score: [0, 0, 0, 0],
+        dept: "企业文化部"
       },
       curIdx: 0,
-      autoScore: 0
+      autoScore: 0,
+      dataType: "insert"
     };
   },
   computed: {
@@ -77,36 +87,16 @@ export default {
       });
       this.autoScore = sum;
       return sum;
-      // get() {
-      //   let sum = 0;
-      //   this.formItem.score.forEach(item => {
-      //     sum += item;
-      //   });
-      //   return sum;
-      // }
-      // set(val) {
-      //   let percent = val / 100;
-      //   let arr = [];
-      //   let sum = 0;
-      //   this.formItem.score.forEach((item, i) => {
-      //     if (i < this.formItem.score.length - 1) {
-      //       let newScore = this.standardList[i].ratio * 10 * percent;
-      //       arr.push(parseInt(newScore));
-      //       sum += parseInt(newScore);
-      //     } else {
-      //       arr.push(val - sum);
-      //     }
-      //   });
-      //   this.formItem.score = arr;
-      // }
     }
   },
-  // watch: {
-  //   subScore(val) {
-  //     this.autoScore = val;
-  //   }
-  // },
   methods: {
+    submit() {
+      let data = this.formItem;
+      this.$Notice.open({
+        title: this.dataType,
+        desc: JSON.stringify(data)
+      });
+    },
     autoCalcScore(val) {
       let percent = val / 100;
       let arr = [];
@@ -147,6 +137,9 @@ export default {
 <style lang="less" scoped>
 .actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  .info {
+    font-size: 9pt;
+  }
 }
 </style>
