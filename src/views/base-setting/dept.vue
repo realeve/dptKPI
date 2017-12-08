@@ -154,9 +154,38 @@ export default {
         this.reset();
       });
     },
-    updateDept() {
-      let a = this.deptComponent.toArray();
-      console.log(a);
+    updateDept: async function() {
+      let activeList = this.deptComponent.toArray();
+      let validList = this.validComponent.toArray();
+
+      let data = {
+        db: "db2",
+        tbl: "data_dept",
+        status: 1,
+        condition: {
+          id: activeList
+        }
+      };
+      let step1 = await axios({
+        data,
+        method: "put"
+      }).then(res => res.id);
+      data = {
+        db: "db2",
+        tbl: "data_dept",
+        status: 0,
+        condition: {
+          id: validList
+        }
+      };
+      let step2 = await axios({
+        data,
+        method: "put"
+      }).then(res => res.id);
+      this.$Notice.open({
+        title: "修改完毕",
+        desc: `成功修改${step1 + step2}条信息`
+      });
     },
     initDropper() {
       document.body.ondrop = function(event) {
