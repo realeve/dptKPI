@@ -49,6 +49,20 @@ let MANAGE = {
     }
 };
 
+let PAPER = {
+    depts: {
+        id: 11,
+        nonce: 'e6d832ad83',
+        cache: CACHE_MAX
+    },
+    userList: {
+        id: 12,
+        nonce: 'd91dabea8f',
+        cache: CACHE_MAX
+    }
+};
+
 export default {
-    MANAGE
+    MANAGE,
+    PAPER
 };

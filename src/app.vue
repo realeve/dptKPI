@@ -13,10 +13,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getTaskList"])
+    ...mapActions(["getTaskList", "getDeptList", "getUserList"]),
+    init() {
+      this.getTaskList();
+      this.getDeptList();
+      this.getUserList();
+    }
   },
   mounted() {
-    this.getTaskList();
+    this.init();
   },
   beforeDestroy() {}
 };

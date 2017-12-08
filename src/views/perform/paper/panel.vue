@@ -3,23 +3,52 @@
   <Card shadow>
     <p slot="title">
       <Icon type="stats-bars"></Icon>
-      企业文化部</p>
+      {{paper.deptList[paper.curDeptIdx].name}}</p>
     <div class="content">
-      <p class="leader">主管领导：时延风</p>
+      <p class="leader">主管领导：{{curDept.leader}}</p>
 
       <p class="user">部门领导：
-        <span>唐晓琴</span>
-        <span>尹放</span>
+        <span v-for="(user,i) in curLeaders" :key="i">{{user.username}}</span>
       </p>
       <div class="score">
-        <p>近期平均得分：72.33</p>
-        <p>近期平均排名：4</p>
+        <p>近期平均得分：</p>
+        <p>近期平均排名：</p>
       </div>
     </div>
   </Card>
 </template>
 <script>
-export default {};
+import { mapState, mapMutations } from "vuex";
+export default {
+  data() {
+    return {};
+  },
+  computed: {
+    ...mapState(["paper"]),
+    curDeptIdx: {
+      get() {
+        return this.paper.curDeptIdx;
+      },
+      set(value) {
+        this.setPaper({
+          key: "curDeptIdx",
+          value
+        });
+      }
+    },
+    curDept() {
+      return this.paper.deptList[this.curDeptIdx];
+    },
+    curLeaders() {
+      return this.paper.userList.filter(
+        item => item.dept == this.curDept.value
+      );
+    }
+  },
+  methods: {
+    ...mapMutations(["setPaper"])
+  }
+};
 </script>
 
 <style lang="less" scoped>

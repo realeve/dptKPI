@@ -2,33 +2,32 @@
   <Card shadow>
     <p slot="title">
       <Icon type="ios-paper-outline"></Icon>
-      评分</p>
-
+      {{paper.curTask.task_name}}</p>
     <Card>
       <p slot="title">
         <Icon type="ios-paper-outline"></Icon>
-        {{formItem.dept}}</p>
+        {{curDept.name}}</p>
       <p slot="extra">
         <span class="text-primary text-bold">{{subScore}}</span> 分，第
         <span class="text-error text-bold">7</span> 名</p>
       <div class="content">
         <Form :model="formItem" :label-width="100">
           <Row :gutter="5">
-            <Col :span="12" v-for="(paper,idx) in standardList" :key="idx">
-            <FormItem :label="paper.dimention">
-              <v-slider v-model="formItem.score[idx]" :show-stops="true" :user-stops="stopList[idx]" :show-input="true" :max="paper.ratio*10" :tip-format="formatTip" @on-hover="dataChange(idx)" @on-input="dataChange(idx)"></v-slider>
+            <Col :span="12" v-for="(item,idx) in standardList" :key="idx">
+            <FormItem :label="item.dimention">
+              <v-slider v-model="formItem.score[idx]" :show-stops="true" :user-stops="stopList[idx]" :show-input="true" :max="item.ratio*10" :tip-format="formatTip" @on-hover="dataChange(idx)" @on-input="dataChange(idx)"></v-slider>
             </FormItem>
             </Col>
           </Row>
           <FormItem label="总分">
             <v-slider v-model="autoScore" :show-stops="true" :user-stops="[70,80,90]" :show-input="true" @on-change="autoCalcScore"></v-slider>
           </FormItem>
-          <Progress :percent="parseInt(15*100/23)" :stroke-width="1" hide-info></Progress>
+          <Progress :percent="percent" :stroke-width="1" hide-info></Progress>
 
           <div class="actions">
             <div class="info">
-              <p>评分进度：15/23</p>
-              <p>下一部门：XX部</p>
+              <p>评分进度：{{paper.curDeptIdx+1}} /{{paper.deptList.length}}</p>
+              <p v-show="paper.curDeptIdx+1<paper.deptList.length">下一部门：{{nextDept}}</p>
             </div>
             <div>
               <Button type="primary" class="margin-right-30" @click="submit">提交</Button>
@@ -41,9 +40,12 @@
   </Card>
 </template>
 <script>
-import { axios } from "../../../libs/axios";
-import API from "../../../libs/api";
+import { axios, API } from "../../../libs/axios";
+
 import VSlider from "../../components/slider";
+
+import { mapState, mapMutations } from "vuex";
+
 export default {
   components: {
     VSlider
@@ -53,17 +55,44 @@ export default {
       standardList: [],
       formItem: {
         score: [0, 0, 0, 0],
-        dept: "企业文化部"
+        dept: ""
       },
-      curIdx: 0,
+      curQuestionIdx: 0,
       autoScore: 0,
-      dataType: "insert"
+      dataType: "insert",
+      nextDept: ""
     };
   },
   computed: {
+    ...mapState(["paper"]),
+    curDeptIdx: {
+      get() {
+        return this.paper.curDeptIdx;
+      },
+      set(value) {
+        this.setPaper({
+          key: "curDeptIdx",
+          value
+        });
+      }
+    },
+    curDept() {
+      return this.paper.deptList[this.curDeptIdx];
+    },
+    curId() {
+      let params = this.$route.params;
+      if (!Reflect.has(params, "id")) {
+        this.notFound();
+        return;
+      }
+      return params.id;
+    },
+    percent() {
+      return parseInt(this.curDeptIdx * 100 / this.paper.deptList.length);
+    },
     tipText() {
-      let paper = this.standardList[this.curIdx];
-      let score = this.formItem.score[this.curIdx];
+      let paper = this.standardList[this.curQuestionIdx];
+      let score = this.formItem.score[this.curQuestionIdx];
       let desc = paper.detail.filter(
         item =>
           score <= item.standard.max * 10 && score > item.standard.min * 10
@@ -89,7 +118,13 @@ export default {
       return sum;
     }
   },
+  watch: {
+    curDeptIdx(val) {
+      this.setCurDept();
+    }
+  },
   methods: {
+    ...mapMutations(["setPaper"]),
     submit() {
       let data = this.formItem;
       this.$Notice.open({
@@ -122,10 +157,16 @@ export default {
       return this.tipText;
     },
     dataChange(idx) {
-      this.curIdx = idx;
+      this.curQuestionIdx = idx;
+    },
+    setCurDept() {
+      if (this.curDeptIdx < this.paper.deptList.length - 1) {
+        this.nextDept = this.paper.deptList[this.curDeptIdx + 1].name;
+      }
     },
     init() {
       this.loadStandard();
+      this.setCurDept();
     }
   },
   mounted() {
