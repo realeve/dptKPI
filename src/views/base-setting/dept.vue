@@ -10,7 +10,9 @@
         <Row>
           <Col span="12">
           <Card dis-hover>
-            <p slot="title">不参与评价</p>
+            <p slot="title">不参与评价
+              <small>{{validList.length}}</small>
+            </p>
             <div style="height: 400px;">
               <ul ref="validList" class="iview-admin-draggable-list">
                 <li v-for="item in validList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
@@ -25,7 +27,9 @@
           </Col>
           <Col span="12" class="padding-left-10">
           <Card dis-hover>
-            <p slot="title">参与评价</p>
+            <p slot="title">参与评价
+              <small>{{deptList.length}}</small>
+            </p>
             <div style="height: 400px;">
               <ul ref="deptList" class="iview-admin-draggable-list">
                 <li v-for="item in deptList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
@@ -152,6 +156,7 @@ export default {
         // 刷新数据
         this.loadDeptList();
         this.reset();
+        this.editType = "NEW";
       });
     },
     updateDept: async function() {
@@ -178,6 +183,7 @@ export default {
           id: validList
         }
       };
+
       let step2 = await axios({
         data,
         method: "put"
@@ -186,6 +192,25 @@ export default {
         title: "修改完毕",
         desc: `成功修改${step1 + step2}条信息`
       });
+      this.updateDptOrder(activeList);
+      // 调整部门顺序
+    },
+    updateDptOrder: async function(list) {
+      for (let i = 0; i < list.length; i++) {
+        let id = list[i];
+        let data = {
+          db: "db2",
+          tbl: "data_dept",
+          order_idx: i,
+          condition: {
+            id
+          }
+        };
+        await axios({
+          data,
+          method: "put"
+        });
+      }
     },
     initDropper() {
       document.body.ondrop = function(event) {
