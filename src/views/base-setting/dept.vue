@@ -10,9 +10,11 @@
         <Row>
           <Col span="12">
           <Card dis-hover>
-            <p slot="title">不参与评价
-              <small>{{validList.length}}</small>
-            </p>
+            <div slot="title">
+              <Badge :count="validList.length" class-name="cus-count">
+                <p>不参与评价</p>
+              </Badge>
+            </div>
             <div style="height: 400px;">
               <ul ref="validList" class="iview-admin-draggable-list">
                 <li v-for="item in validList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
@@ -27,9 +29,11 @@
           </Col>
           <Col span="12" class="padding-left-10">
           <Card dis-hover>
-            <p slot="title">参与评价
-              <small>{{deptList.length}}</small>
-            </p>
+            <div slot="title">
+              <Badge :count="deptList.length" class-name="cus-count">
+                <p>参与评价</p>
+              </Badge>
+            </div>
             <div style="height: 400px;">
               <ul ref="deptList" class="iview-admin-draggable-list">
                 <li v-for="item in deptList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
@@ -268,5 +272,9 @@ export default {
   padding-top: 15px;
   display: flex;
   justify-content: flex-end;
+}
+.cus-count {
+  top: -14px;
+  right: -10px;
 }
 </style>

@@ -1,75 +1,41 @@
 <template>
   <Card shadow>
-    <p slot="title">
+    <div slot="title">
       <Icon type="calculator"></Icon>
-      任务管理</p>
+      任务管理
+      <Button class="margin-left-10" type="success" size="small" @click="newItem">
+        <Icon type="plus-round"></Icon>
+        新增</Button>
+    </div>
+
     <Row :gutter="20">
-      <Col :md="12" :lg="8">
-      <v-card>
-        <span slot="title">
-          <Icon type="ios-plus-empty"></Icon>
-          新增</span>
-        <div slot="content" @click="newItem">
-          <div class="ivu-upload ivu-upload-drag">
-            <Icon type="ios-plus-empty" size="52" style="color: #3399ff" class="padding-top-10 padding-bottom-10"></Icon>
-          </div>
-        </div>
-      </v-card>
-      </Col>
       <Col v-for="(item,i) in taskList " :key="i" :md="12 " :lg="8 ">
-      <v-card>
-        <span slot="title">
-          <Icon type="flag"></Icon>
-          {{item.title}}
-        </span>
-        <Button type="ghost" slot="action" @click="edit(i) ">
-          <Icon type="edit"></Icon>
-          编辑
-        </Button>
-        <div slot="content">
-          <p>开始时间：{{item.tstart}}</p>
-          <p>结束时间：{{item.tend}}</p>
-          <p>领导权重：{{item.ratio_leader}}</p>
-          <p>用户权重：{{item.ratio_user}}</p>
-        </div>
-        <div slot="footer">
-          <p>领导：{{item.complete_leader}} / {{item.count_leader}} </p>
-          <p>用户：{{item.complete_user}} / {{item.count_user}}</p>
-        </div>
-      </v-card>
+      <task-card :task="item" @edit="edit(i)"></task-card>
       </Col>
     </Row>
+
     </div>
   </Card>
 </template>
 
 <script>
-import { axios } from "../../libs/axios";
-import API from "../../libs/api";
+import { axios, API } from "../../libs/axios";
+
 import VCard from "../components/card";
+import TaskCard from "./taskcard";
 
 export default {
   components: {
-    VCard
+    VCard,
+    TaskCard
   },
   data() {
     return {
       taskList: [
         {
-          title: "2017年部门履职能力评价",
-          tstart: "2017-01-01",
-          tend: "2017-12-11",
-          ratio_leader: 0.8,
-          ratio_user: 0.2,
-          count_leader: 7,
-          complete_leader: 3,
-          count_user: 25,
-          complete_user: 13
-        },
-        {
-          title: "2016年部门履职能力评价",
-          tstart: "2016-01-01",
-          tend: "2016-12-11",
+          task_name: "2017年部门履职能力评价",
+          start_time: "2017-01-01",
+          end_time: "2017-12-11",
           ratio_leader: 0.8,
           ratio_user: 0.2,
           count_leader: 7,

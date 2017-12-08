@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import { axios } from "../../libs/axios";
-import API from "../../libs/api";
+import { axios, API } from "../../libs/axios";
 
 export default {
   data() {

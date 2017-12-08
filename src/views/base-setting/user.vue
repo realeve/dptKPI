@@ -1,27 +1,22 @@
 <template>
   <Card shadow>
-    <p slot="title">
+    <div slot="title">
       <Icon type="person"></Icon>
-      用户管理</p>
+      用户管理
+      <Button class="margin-left-10" type="success" size="small" @click="addNew">
+        <Icon type="plus-round"></Icon>
+        添加</Button>
+    </div>
     <div slot="extra">
       <Input v-model.trim="queryInfo" placeholder="输入姓名或部门拼音快速查找用户" style="width: 300px"></Input>
     </div>
-    <Row class="margin-top-10" :gutter="20">
-      <Col span="6" class="margin-top-20 user-card">
-      <Card>
-        <p slot="title">添加用户
-        </p>
-        <div class="ivu-upload ivu-upload-drag" @click="addNew">
-          <Icon type="ios-plus-empty" size="60" style="color: #3399ff"></Icon>
-        </div>
-      </Card>
-      </Col>
 
+    <Row :gutter="20">
       <Col span="6" v-for="(item,i) in xUsers" :key="item.id" class="margin-top-20 user-card">
       <user-card :user="item" @edit="editUser(i)" />
       </Col>
-
     </Row>
+
     <Modal v-model="modal" :title="modalTitle" @on-ok="edit">
       <Form :vmodel="curUser" :label-width="80">
         <FormItem label="姓名">

@@ -1,21 +1,13 @@
 <template>
   <Card shadow>
-    <p slot="title">
+    <div slot="title">
       <Icon type="calculator"></Icon>
-      评分标准</p>
+      评分标准
+      <Button class="margin-left-10" type="success" size="small" @click="newItem">
+        <Icon type="plus-round"></Icon>
+        添加</Button>
+    </div>
     <Row :gutter="20">
-      <Col :md="12" :lg="8">
-      <v-card>
-        <span slot="title">
-          <Icon type="ios-plus-empty"></Icon>
-          新增</span>
-        <div slot="content" @click="newItem">
-          <div class="ivu-upload ivu-upload-drag">
-            <Icon type="ios-plus-empty" size="52" style="color: #3399ff"></Icon>
-          </div>
-        </div>
-      </v-card>
-      </Col>
       <Col v-for="(item,i) in taskList " :key="i" :md="12 " :lg="8 ">
       <v-card>
         <span slot="title">
@@ -36,8 +28,8 @@
 </template>
 
 <script>
-import { axios } from "../../libs/axios";
-import API from "../../libs/api";
+import { axios, API } from "../../libs/axios";
+
 import VCard from "../components/card";
 
 export default {
