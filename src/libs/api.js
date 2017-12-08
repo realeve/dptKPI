@@ -23,7 +23,12 @@ let MANAGE = {
         nonce: 'f150045a94',
         cache: 0
     },
-
+    // 公司领导分管部门
+    leaderDepts: {
+        id: 9,
+        nonce: '596c278e0b',
+        cache: 0
+    },
     // 部门管理
     depts: {
         id: 7,

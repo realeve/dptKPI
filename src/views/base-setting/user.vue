@@ -12,38 +12,15 @@
         <p slot="title">添加用户
         </p>
         <div class="ivu-upload ivu-upload-drag" @click="addNew">
-          <Icon type="ios-plus-empty" size="36" style="color: #3399ff"></Icon>
+          <Icon type="ios-plus-empty" size="60" style="color: #3399ff"></Icon>
         </div>
       </Card>
       </Col>
 
       <Col span="6" v-for="(item,i) in xUsers" :key="item.id" class="margin-top-20 user-card">
-      <Card>
-        <div slot="title">
-          <span class="text-bold">{{item.username}}</span>
-          <span class="sub-title">{{item.pinyin.username_full}}</span>
-          <p class="sub-title-dept">{{item.dept_name}}</p>
-        </div>
-        <a href="#" slot="extra" @click.prevent="editUser(i)">
-          <Icon type="edit"></Icon>
-          编辑
-        </a>
-        <ul class="content">
-          <li>
-            <span>类型</span>
-            <span>{{item.type_name}}</span>
-          </li>
-          <li>
-            <span>状态</span>
-            <span>{{item.status_name}}</span>
-          </li>
-          <!-- <li>
-            <span>分管部门</span>
-            <span>某部门</span>
-          </li> -->
-        </ul>
-      </Card>
+      <user-card :user="item" @edit="editUser(i)" />
       </Col>
+
     </Row>
     <Modal v-model="modal" :title="modalTitle" @on-ok="edit">
       <Form :vmodel="curUser" :label-width="80">
@@ -66,7 +43,7 @@
             <span slot="close">否</span>
           </i-switch>
         </FormItem>
-        <FormItem label="分管部门">
+        <FormItem label="分管部门" v-show="curUser.type_id<2">
           <Select multiple v-model="curUser.depts" style="width:200px">
             <Option v-for="(item,i) in deptList" :value="item.value" :key="i">{{item.name}}</Option>
           </Select>
@@ -84,14 +61,19 @@ import _ from "lodash";
 
 let MANAGE = API.MANAGE;
 
+import UserCard from "./usercard";
+
 export default {
+  components: {
+    UserCard
+  },
   data() {
     return {
       modal: false,
       curIdx: 0,
       curUser: {
         username: "",
-        dept: 0,
+        dept: 2,
         type_id: 2,
         depts: [],
         status: true
@@ -99,6 +81,7 @@ export default {
       userList: [],
       userTypeList: [],
       deptList: [],
+      leaderDepts: [],
       queryInfo: ""
     };
   },
@@ -108,23 +91,29 @@ export default {
         ? "编辑【" + this.curUser.username + "】个人信息"
         : "新建用户";
     },
-    xUserList() {
-      return this.userList.map(item => {
+    xUsers() {
+      let xUserList = this.userList.map(item => {
         item.pinyin = {
           username: pinyin.toPinYin(item.username),
           username_full: pinyin.toPinYinFull(item.username),
           dept_name: pinyin.toPinYin(item.dept_name),
           dept_name_full: pinyin.toPinYinFull(item.dept_name)
         };
+
+        item.depts = [];
+
+        if (item.type_id < 2) {
+          item.depts = this.leaderDepts.filter(leader => leader.uid == item.id);
+        }
+
         return item;
       });
-    },
-    xUsers() {
+
       let str = this.queryInfo.toLowerCase();
       if (str == "") {
-        return this.xUserList;
+        return xUserList;
       }
-      return this.xUserList.filter(
+      return xUserList.filter(
         item =>
           item.pinyin.username.toLowerCase().includes(str) ||
           item.pinyin.username_full.toLowerCase().includes(str) ||
@@ -145,19 +134,17 @@ export default {
         depts: [],
         status: item.status == 1 ? true : false
       };
+      if (item.type_id < 2) {
+        this.curUser.depts = item.depts.map(item => item.value);
+      }
     },
     addNew() {
       this.modal = true;
       this.curIdx = -1;
-      this.curUser = {
-        username: "",
-        dept: 0,
-        type_id: 2,
-        depts: [],
-        status: true
-      };
+      this.curUser.username = "";
+      this.curUser.depts = [];
     },
-    edit() {
+    edit: async function() {
       let data = JSON.stringify(this.curUser);
       data = JSON.parse(data);
       data.status = data.status ? 1 : 0;
@@ -172,7 +159,8 @@ export default {
           id: this.curIdx
         };
       }
-      axios({
+
+      let uid = await axios({
         method: this.curIdx == -1 ? "post" : "put",
         data
       }).then(res => {
@@ -180,8 +168,34 @@ export default {
           title: "系统提示",
           desc: "提交成功"
         });
-        this.loadUserList();
+        return this.curIdx == -1 ? res.id : this.curIdx;
       });
+      // 更新领导所管辖部门列表
+      if (data.type_id < 2) {
+        this.updateManageDepts(uid, manageDepts);
+        return;
+      }
+      this.loadUserList();
+    },
+    updateManageDepts: async function(uid, manageDepts) {
+      let data = {
+        db: "db2",
+        tbl: "data_dept",
+        uid,
+        condition: {
+          id: manageDepts
+        }
+      };
+      await axios({
+        data,
+        method: "put"
+      }).then(res => res.id);
+      await this.init();
+    },
+    loadLeaderDepts: async function() {
+      this.leaderDepts = await axios({ params: MANAGE.leaderDepts }).then(
+        res => res.data
+      );
     },
     loadUserList: async function() {
       this.userList = await axios({ params: MANAGE.userList }).then(
@@ -196,11 +210,15 @@ export default {
       this.deptList = await axios({ params: MANAGE.deptList }).then(
         res => res.data
       );
+    },
+    init: async function() {
+      await this.loadLeaderDepts();
+      await this.loadUserList();
     }
   },
-  mounted() {
-    this.loadUserList();
-    this.loadInitSetting();
+  mounted: async function() {
+    await this.loadInitSetting();
+    await this.init();
   }
 };
 </script>
@@ -208,6 +226,7 @@ export default {
 <style lang="less" scoped>
 // @import "../../styles/common.less";
 .user-card {
+  cursor: pointer;
   .ivu-card-head {
     p {
       font-size: 13pt;
@@ -221,12 +240,6 @@ export default {
     .sub-title-dept {
       letter-spacing: 0.5em;
     }
-  }
-}
-.content {
-  li {
-    display: flex;
-    justify-content: space-between;
   }
 }
 </style>
