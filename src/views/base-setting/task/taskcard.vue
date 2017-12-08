@@ -4,7 +4,7 @@
       <Icon type="flag"></Icon>
       {{task.task_name}}
     </span>
-    <Button type="ghost" slot="action" @click="edit">
+    <Button v-show="showEdit" type="ghost" slot="action" @click="edit">
       <Icon type="edit"></Icon>
       编辑
     </Button>
@@ -40,12 +40,17 @@ export default {
       type: Object
     }
   },
+  computed: {
+    showEdit() {
+      return !this.$route.path.includes("home");
+    }
+  },
   methods: {
     edit() {
       this.$emit("edit");
     },
     perform() {
-      this.$router.push("/perform/paper");
+      this.$router.push("/paper/" + this.task.id);
     },
     showScore() {
       this.$Notice.open({

@@ -53,6 +53,7 @@ export const otherRouter = {
         { path: 'home', title: { i18n: 'home' }, name: 'home_index', component: resolve => { require(['@/views/home/home.vue'], resolve); } },
         { path: 'setting/standard/:id', title: '评分细则', name: 'setting_score', access: 0, component: resolve => { require(['@/views/base-setting/score.vue'], resolve); } },
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: resolve => { require(['@/views/own-space/own-space.vue'], resolve); } },
+        { path: 'paper/:id', title: '部门评分', name: 'perform_paper', component: resolve => { require(['@/views/perform/paper'], resolve); } }
     ]
 };
 
@@ -88,8 +89,8 @@ export const appRouter = [{
         name: 'perform',
         component: Main,
         children: [
-            { path: 'paper', title: '部门评分', name: 'perform_paper', component: resolve => { require(['@/views/perform/paper'], resolve); } },
-            { path: 'static', title: '评分统计', name: 'perform_static', component: resolve => { require(['@/views/perform/paper'], resolve); } }
+            { path: 'paper', title: '履职能力评价', name: 'perform_paper_list', component: resolve => { require(['@/views/perform/paper/paperlist.vue'], resolve); } },
+            { path: 'static/:id', title: '评分分析', name: 'perform_static', component: resolve => { require(['@/views/perform/paper'], resolve); } }
         ]
     }
 ];

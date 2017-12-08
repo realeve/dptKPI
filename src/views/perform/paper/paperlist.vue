@@ -5,7 +5,7 @@
       首页
     </div>
     <Row :gutter="20">
-      <Col v-for="(item,i) in paper.taskList" :key="item.id" :md="8" :lg="6">
+      <Col v-for="(item,i) in taskList" :key="item.id" :md="8" :lg="6">
       <task-card :task="item"></task-card>
       </Col>
     </Row>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TaskCard from "../base-setting/task/taskcard";
+import TaskCard from "../../base-setting/task/taskcard";
 
 import { mapState } from "vuex";
 
@@ -22,7 +22,10 @@ export default {
     TaskCard
   },
   computed: {
-    ...mapState(["paper"])
+    ...mapState(["paper"]),
+    taskList() {
+      return this.paper.taskList.filter(item => item.is_start && !item.is_end);
+    }
   }
 };
 </script>

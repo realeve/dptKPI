@@ -9,8 +9,8 @@
     </div>
 
     <Row :gutter="20">
-      <Col v-for="(item,i) in taskList " :key="item.id" :md="8" :lg="6">
-      <task-card :show="modal" :task="item" @edit="edit(i)"></task-card>
+      <Col v-for="(item,i) in paper.taskList " :key="item.id" :md="8" :lg="6">
+      <task-card :task="item" @edit="edit(i)"></task-card>
       </Col>
     </Row>
 
@@ -26,13 +26,13 @@ let MANAGE = API.MANAGE;
 import _ from "lodash";
 import moment from "moment";
 
-import VCard from "../../components/card";
 import TaskCard from "./taskcard";
 import TaskPanel from "./taskpanel.vue";
 
+import { mapState, mapActions } from "vuex";
+
 export default {
   components: {
-    VCard,
     TaskCard,
     TaskPanel
   },
@@ -41,11 +41,14 @@ export default {
       modalTitle: "",
       curTask: {},
       modal: false,
-      taskList: [],
       editType: "NEW"
     };
   },
+  computed: {
+    ...mapState(["paper"])
+  },
   methods: {
+    ...mapActions(["getTaskList"]),
     hidePanel() {
       this.modal = false;
     },
@@ -56,7 +59,7 @@ export default {
     edit(idx) {
       this.editType = "EDIT";
       this.modalTitle = "编辑任务";
-      this.curTask = _.cloneDeep(this.taskList[idx]);
+      this.curTask = _.cloneDeep(this.paper.taskList[idx]);
       this.modal = true;
     },
     setData(task) {
@@ -86,7 +89,7 @@ export default {
           title: "系统提示",
           desc: "提交成功"
         });
-        this.loadTaskList();
+        this.getTaskList();
       });
     },
     newItem() {
@@ -116,28 +119,7 @@ export default {
         complete_user: 0
       };
       this.modal = true;
-    },
-    loadTaskList: async function() {
-      this.taskList = await axios({ params: MANAGE.taskList }).then(res =>
-        res.data.map(item => {
-          item.is_start = item.is_start == 1 ? true : false;
-          item.is_end = item.is_end == 1 ? true : false;
-          item.status_desc = item.is_start ? "已开始" : "尚未开始";
-          item.status_desc = item.is_end ? "已结束" : item.status_desc;
-          return item;
-        })
-      );
-    },
-    init() {
-      this.loadTaskList();
     }
-  },
-  mounted() {
-    this.init();
   }
 };
 </script>
-
-<style lang="less" scoped>
-// @import "../../styles/common.less";
-</style>

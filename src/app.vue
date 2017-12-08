@@ -5,15 +5,20 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       theme: this.$store.state.app.themeColor
     };
   },
-  mounted() {},
-  beforeDestroy() {},
-  methods: {}
+  methods: {
+    ...mapActions(["getTaskList"])
+  },
+  mounted() {
+    this.getTaskList();
+  },
+  beforeDestroy() {}
 };
 </script>
 
