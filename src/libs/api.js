@@ -33,12 +33,19 @@ let MANAGE = {
     depts: {
         id: 7,
         nonce: '6f77963c65',
-        cache: '0'
+        cache: 0
     },
     leaderList: {
         id: 8,
         nonce: '719f24df9c',
         cache: CACHE_MAX
+    },
+
+    // 任务管理
+    taskList: {
+        id: 10,
+        nonce: '302ea10d9f',
+        cache: 0
     }
 };
 

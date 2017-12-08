@@ -15,7 +15,7 @@
                 <p>不参与评价</p>
               </Badge>
             </div>
-            <div style="height: 400px;">
+            <div style="height: 600px;">
               <ul ref="validList" class="iview-admin-draggable-list">
                 <li v-for="item in validList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
                   <span>{{ item.name }}</span>
@@ -34,7 +34,7 @@
                 <p>参与评价</p>
               </Badge>
             </div>
-            <div style="height: 400px;">
+            <div style="height: 600px;">
               <ul ref="deptList" class="iview-admin-draggable-list">
                 <li v-for="item in deptList" :key="item.value" class="notwrap todolist-item" :data-id="item.value">
                   <span>{{ item.name }}</span>
@@ -58,7 +58,7 @@
           <Icon type="android-funnel"></Icon>
           新增部门
         </p>
-        <div style="height: 484px;">
+        <div>
           <Form :model="formItem" :label-width="80">
             <FormItem label="部门名称">
               <Input v-model="formItem.dept_name" placeholder="请输入部门名称"></Input>

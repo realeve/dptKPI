@@ -12,7 +12,6 @@
       <v-card>
         <span slot="title">
           <Icon type="flag"></Icon>
-
         </span>
         <div slot="content" class="card-body">
           <p class="content">{{item.title}}</p>
