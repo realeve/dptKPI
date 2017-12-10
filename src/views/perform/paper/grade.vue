@@ -27,7 +27,10 @@
           <div class="actions">
             <div class="info">
               <p>评分进度：{{paper.curDeptIdx+1}} /{{paper.deptList.length}}</p>
-              <p v-show="paper.curDeptIdx+1<paper.deptList.length">下一部门：{{nextDept}}</p>
+              <p>下一部门：
+                <span v-if="isNotComplete">{{nextDept}}</span>
+                <span v-else>已完结，点击右侧列表修改评分</span>
+              </p>
             </div>
             <div>
               <Button type="primary" class="margin-right-30" @click="submit">提交</Button>
@@ -44,7 +47,7 @@ import { axios, API } from "../../../libs/axios";
 
 import VSlider from "../../components/slider";
 
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -65,6 +68,7 @@ export default {
   },
   computed: {
     ...mapState(["paper"]),
+    ...mapGetters(["curDept", "isNotComplete"]),
     curDeptIdx: {
       get() {
         return this.paper.curDeptIdx;
@@ -75,9 +79,6 @@ export default {
           value
         });
       }
-    },
-    curDept() {
-      return this.paper.deptList[this.curDeptIdx];
     },
     curId() {
       let params = this.$route.params;
@@ -160,7 +161,7 @@ export default {
       this.curQuestionIdx = idx;
     },
     setCurDept() {
-      if (this.curDeptIdx < this.paper.deptList.length - 1) {
+      if (this.isNotComplete) {
         this.nextDept = this.paper.deptList[this.curDeptIdx + 1].name;
       }
     },

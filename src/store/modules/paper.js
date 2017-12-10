@@ -13,6 +13,11 @@ const paper = {
             state[data.key] = data.value;
         }
     },
+    getters: {
+        curDept: (state, getters) => state.deptList[state.curDeptIdx],
+        curLeaders: (state, getters) => state.userList.filter(item => item.dept == getters.curDept.value),
+        isNotComplete: (state, getters) => state.curDeptIdx + 1 < state.deptList.length
+    },
     actions: {
         getTaskList: async function(contex) {
             let value = await axios({ params: API.MANAGE.taskList }).then(res =>

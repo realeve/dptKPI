@@ -3,7 +3,7 @@
   <Card shadow>
     <p slot="title">
       <Icon type="stats-bars"></Icon>
-      {{paper.deptList[paper.curDeptIdx].name}}</p>
+      {{curDept.name}}</p>
     <div class="content">
       <p class="leader">主管领导：{{curDept.leader}}</p>
 
@@ -18,13 +18,14 @@
   </Card>
 </template>
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {};
   },
   computed: {
     ...mapState(["paper"]),
+    ...mapGetters(["curLeaders", "curDept"]),
     curDeptIdx: {
       get() {
         return this.paper.curDeptIdx;
@@ -35,14 +36,6 @@ export default {
           value
         });
       }
-    },
-    curDept() {
-      return this.paper.deptList[this.curDeptIdx];
-    },
-    curLeaders() {
-      return this.paper.userList.filter(
-        item => item.dept == this.curDept.value
-      );
     }
   },
   methods: {
