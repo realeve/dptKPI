@@ -39,7 +39,11 @@ export default {
       // });
       let dv = _.cloneDeep(data);
       dv.sort((a, b) => a.value - b.value);
-      return dv;
+      return dv.map((item, i) => {
+        item.name = `${item.name}.${data.length - i}`;
+        return item;
+      });
+      // return dv;
     },
     refreshChart(data) {
       let dv = this.getDv(data);
@@ -58,7 +62,7 @@ export default {
       this.chart.axis("name", {
         alias: "部门",
         label: {
-          offset: 12,
+          offset: 4,
           formatter: val => {
             let str = val.replace("(", "\n(");
             switch (val) {
@@ -93,7 +97,7 @@ export default {
         console.log(data);
         if (data) {
           let curId = this.paper.deptList.findIndex(
-            item => item.name == data._origin.name
+            item => item.value == data._origin.dept_id
           );
 
           this.setPaper({
