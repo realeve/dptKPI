@@ -3,9 +3,9 @@
   <Row :gutter="10">
     <Col :md="16" :lg="16" :sm="24">
     <v-grade></v-grade>
-    <v-panel class="margin-top-20"></v-panel>
     </Col>
     <Col :md="8" :lg="8" :sm="24">
+    <v-panel class="margin-bottom-20"></v-panel>
     <v-list></v-list>
     </Col>
   </Row>

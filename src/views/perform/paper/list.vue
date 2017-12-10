@@ -3,14 +3,15 @@
     <p slot="title">
       <Icon type="android-funnel"></Icon>
       分数排名</p>
-    <div ref="chart" class="chart"></div>
+    <div ref="chart"></div>
+    </div>
   </Card>
 </template>
 
 <script>
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
-import echarts from "echarts";
-import { theme } from "./ali_G2";
+import G2 from "@antv/g2";
+import { View } from "@antv/data-set";
 import _ from "lodash";
 
 export default {
@@ -28,106 +29,91 @@ export default {
   },
   methods: {
     ...mapMutations(["setPaper"]),
-    getDv(val) {
-      let data = _.cloneDeep(val);
-      data.sort((a, b) => a.value - b.value);
-      return data;
-    },
-    getAxis(data) {
-      return data.map(
-        (item, i) => item.name.replace("(", "\n(") + "." + (data.length - i)
-      );
+    getDv(data) {
+      // const dv = new View();
+      // dv.source(data).transform({
+      //   type: "sort",
+      //   callback(a, b) {
+      //     return a.value > b.value;
+      //   }
+      // });
+      let dv = _.cloneDeep(data);
+      dv.sort((a, b) => a.value - b.value);
+      return dv;
     },
     refreshChart(data) {
       let dv = this.getDv(data);
-      this.chart.setOption({
-        yAxis: {
-          data: this.getAxis(dv)
-        },
-        series: {
-          id: "score",
-          data: dv
-        }
-      });
+      this.chart.changeData(dv);
     },
     initChart() {
-      this.chart = echarts.init(this.$refs.chart, theme, { renderer: "svg" });
-
-      let data = this.getDv(this.newScoreList);
-      let option = {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow"
-          }
-        },
-        grid: {
-          top: 0,
-          left: 0,
-          right: 10,
-          bottom: 0,
-          containLabel: true
-        },
-        xAxis: {
-          type: "value",
-          min: 50
-        },
-        yAxis: {
-          name: "部门",
-          type: "category",
-          data: this.getAxis(data)
-        },
-        legend: {
-          show: false,
-          data: ["部门评分"]
-        },
-        series: {
-          id: "score",
-          name: "部门评分",
-          type: "bar",
-          // barWidth: 30,
-          label: {
-            normal: {
-              show: true,
-              position: "insideRight"
-            }
-          },
-          dimensions: ["name", "value"],
-          encode: {
-            x: "name",
-            y: "value"
-          },
-          data
-        }
-      };
-      this.chart.setOption(option);
-      this.initEvents();
-    },
-    initEvents() {
-      this.chart.on("click", params => {
-        let name = params.name;
-        let item = this.newScoreList.find(item => item.name == name);
-        let curId = this.paper.deptList.findIndex(item => item.name == name);
-        this.setPaper({
-          key: "curDeptIdx",
-          value: curId
-        });
-        this.setPaper({
-          key: "curScore",
-          value: item
-        });
-        this.setPaper({
-          key: "curScoreDetail",
-          value: item.score
-        });
-        this.setPaper({
-          key: "editModel",
-          value: "EDIT"
-        });
+      this.chart = new G2.Chart({
+        container: this.$refs.chart,
+        forceFit: true,
+        height: 1000
       });
-      window.onresize = () => {
-        this.chart.resize();
-      };
+
+      let dv = this.getDv(this.newScoreList);
+      this.chart.source(dv);
+
+      this.chart.axis("name", {
+        alias: "部门",
+        label: {
+          offset: 12,
+          formatter: val => {
+            let str = val.replace("(", "\n(");
+            switch (val) {
+              case "钞纸成品制作部":
+                str = "钞纸成品";
+                break;
+              case "基建与行政事务部":
+                str = "基建与行政";
+                break;
+              case "纪检监察内审部":
+                str = "纪检监察";
+                break;
+              case "离退休工作部":
+                str = "离退部";
+                break;
+            }
+            return str;
+          }
+        }
+      });
+      this.chart.coord().transpose();
+      this.chart
+        .interval()
+        .position("name*value")
+        // .color("name")
+        .label("value")
+        .size(20);
+      this.chart.render();
+
+      this.chart.on("interval:click", ev => {
+        const data = ev.data;
+        console.log(data);
+        if (data) {
+          let curId = this.paper.deptList.findIndex(
+            item => item.name == data._origin.name
+          );
+
+          this.setPaper({
+            key: "curDeptIdx",
+            value: curId
+          });
+          this.setPaper({
+            key: "curScore",
+            value: data._origin
+          });
+          this.setPaper({
+            key: "curScoreDetail",
+            value: data._origin.score
+          });
+          this.setPaper({
+            key: "editModel",
+            value: "EDIT"
+          });
+        }
+      });
     }
   },
   mounted() {
@@ -135,10 +121,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-.chart {
-  height: 1100px;
-  width: 80%;
-}
-</style>
