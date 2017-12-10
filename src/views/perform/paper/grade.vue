@@ -133,6 +133,9 @@ export default {
     },
     subScore() {
       let sum = 0;
+      if (!this.isNotComplete) {
+        return sum;
+      }
       this.formItem.score.forEach(item => {
         sum += item;
       });
@@ -218,6 +221,9 @@ export default {
       });
     },
     autoCalcScore(val) {
+      if (!this.isNotComplete) {
+        return;
+      }
       let percent = val / 100;
       let arr = [];
       let sum = 0;
