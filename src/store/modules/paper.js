@@ -18,9 +18,19 @@ const paper = {
         }
     },
     getters: {
-        curDept: (state, getters) => state.deptList[state.curDeptIdx],
+        curDept: (state, getters) => {
+            let data = state.deptList[state.curDeptIdx];
+            if (typeof data == 'undefined') {
+                return {
+                    leader: '',
+                    name: '',
+                    value: -1
+                }
+            }
+            return data;
+        },
         curLeaders: (state, getters) => state.userList.filter(item => item.dept == getters.curDept.value),
-        isNotComplete: (state, getters) => state.curDeptIdx + 1 < state.deptList.length,
+        isNotComplete: (state, getters) => state.curDeptIdx < state.deptList.length || state.scoreList.length < state.deptList.length,
         newScoreList: (state, getters) => {
             let scoreList = _.cloneDeep(state.scoreList);
             if (state.curScore.value == 0) {

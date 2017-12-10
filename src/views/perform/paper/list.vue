@@ -4,7 +4,6 @@
       <Icon type="android-funnel"></Icon>
       分数排名</p>
     <div ref="chart" class="chart"></div>
-    </div>
   </Card>
 </template>
 
@@ -34,11 +33,16 @@ export default {
       data.sort((a, b) => a.value - b.value);
       return data;
     },
+    getAxis(data) {
+      return data.map(
+        (item, i) => item.name.replace("(", "\n(") + "." + (data.length - i)
+      );
+    },
     refreshChart(data) {
       let dv = this.getDv(data);
       this.chart.setOption({
         yAxis: {
-          data: (() => dv.map(item => item.name.replace("(", "\n(")))()
+          data: this.getAxis(dv)
         },
         series: {
           id: "score",
@@ -52,7 +56,7 @@ export default {
       let data = this.getDv(this.newScoreList);
       let option = {
         tooltip: {
-          trigger: "item",
+          trigger: "axis",
           axisPointer: {
             type: "shadow"
           }
@@ -71,13 +75,17 @@ export default {
         yAxis: {
           name: "部门",
           type: "category",
-          data: (() => data.map(item => item.name.replace("(", "\n(")))()
+          data: this.getAxis(data)
+        },
+        legend: {
+          show: false,
+          data: ["部门评分"]
         },
         series: {
           id: "score",
           name: "部门评分",
           type: "bar",
-          barWidth: 30,
+          // barWidth: 30,
           label: {
             normal: {
               show: true,
@@ -130,7 +138,7 @@ export default {
 
 <style lang="less" scoped>
 .chart {
-  height: 800px;
-  max-width: 410px;
+  height: 1100px;
+  width: 80%;
 }
 </style>

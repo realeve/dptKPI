@@ -204,13 +204,14 @@ export default {
       await axios({ method, data });
 
       this.$Notice.open({
-        title: this.dataType,
-        desc: JSON.stringify(data)
+        title: "系统提示",
+        desc: "数据提交成功"
       });
 
       this.refreshChart();
 
       this.formItem.score = [0, 0, 0, 0];
+      this.autoScore = 0;
       this.setPaper({
         key: "editModel",
         value: "NEW"
@@ -230,7 +231,9 @@ export default {
           arr.push(val - sum);
         }
       });
-      this.formItem.score = arr;
+      this.$nextTick(() => {
+        this.formItem.score = arr;
+      });
     },
     loadStandard: async function() {
       this.standardList = await axios({
@@ -246,8 +249,8 @@ export default {
     setCurDept() {
       if (this.isNotComplete) {
         this.nextDept = this.paper.deptList[this.curDeptIdx + 1].name;
+        this.formItem.dept = this.curDeptIdx;
       }
-      this.formItem.dept = this.curDeptIdx;
     },
     refreshChart() {
       this.getScoreList({

@@ -1,6 +1,5 @@
 <template>
-
-  <Card shadow>
+  <Card shadow v-if="isNotComplete">
     <p slot="title">
       <Icon type="stats-bars"></Icon>
       {{curDept.name}}</p>
@@ -25,7 +24,7 @@ export default {
   },
   computed: {
     ...mapState(["paper"]),
-    ...mapGetters(["curLeaders", "curDept"]),
+    ...mapGetters(["curLeaders", "curDept", "isNotComplete"]),
     curDeptIdx: {
       get() {
         return this.paper.curDeptIdx;

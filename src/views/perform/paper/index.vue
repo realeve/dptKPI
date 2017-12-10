@@ -1,24 +1,14 @@
 
 <template>
-  <div>
-    <Row :gutter="10">
-      <Col :md="16" :lg="16" :sm="24">
-      <v-grade></v-grade>
-      </Col>
-      <Col :md="8" :lg="8" :sm="24">
-      <!-- <Row>
-        <Col :span="24">
-        <v-panel></v-panel>
-        </Col>
-        <Col :span="24" class="margin-top-20">
-        <v-list></v-list>
-        </Col>
-      </Row> -->
-      <v-panel></v-panel>
-      <v-list class="margin-top-20"></v-list>
-      </Col>
-    </Row>
-  </div>
+  <Row :gutter="10">
+    <Col :md="16" :lg="16" :sm="24">
+    <v-grade></v-grade>
+    <v-panel class="margin-top-20"></v-panel>
+    </Col>
+    <Col :md="8" :lg="8" :sm="24">
+    <v-list></v-list>
+    </Col>
+  </Row>
 </template>
 
 <script>
