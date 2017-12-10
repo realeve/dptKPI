@@ -17,6 +17,8 @@
   "author": "Lison<zhigang.li@tendcloud.com>",
   "license": "MIT",
   "dependencies": {
+    "@antv/data-set": "^0.7.0",
+    "@antv/g2": "^3.0.2-beta.1",
     "area-data": "^1.0.0",
     "axios": "^0.17.1",
     "echarts": "^3.8.5",

@@ -9,7 +9,7 @@
         {{curDept.name}}</p>
       <p slot="extra">
         <span class="text-primary text-bold">{{subScore}}</span> 分，第
-        <span class="text-error text-bold">7</span> 名</p>
+        <span class="text-error text-bold">{{scoreLevel}}</span> 名</p>
       <div class="content">
         <Form :model="formItem" :label-width="100">
           <Row :gutter="5">
@@ -32,7 +32,7 @@
                 <span v-else>已完结，点击右侧列表修改评分</span>
               </p>
             </div>
-            <div>
+            <div v-show="subScore>0 && isNotComplete">
               <Button type="primary" class="margin-right-30" @click="submit">提交</Button>
             </div>
           </div>
@@ -44,10 +44,10 @@
 </template>
 <script>
 import { axios, API } from "../../../libs/axios";
-
+import util from "../../../libs/util";
 import VSlider from "../../components/slider";
 
-import { mapState, mapMutations, mapGetters } from "vuex";
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -67,15 +67,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["paper"]),
+    ...mapState(["paper", "user"]),
     ...mapGetters(["curDept", "isNotComplete"]),
-    curDeptIdx: {
+    scoreList: {
       get() {
-        return this.paper.curDeptIdx;
+        return this.paper.scoreList;
       },
       set(value) {
         this.setPaper({
-          key: "curDeptIdx",
+          key: "scoreList",
           value
         });
       }
@@ -87,6 +87,26 @@ export default {
         return;
       }
       return params.id;
+    },
+    scoreLevel() {
+      let level = 1;
+      this.paper.scoreList.forEach(item => {
+        if (parseInt(item.value) > this.subScore) {
+          level++;
+        }
+      });
+      return level;
+    },
+    curDeptIdx: {
+      get() {
+        return this.paper.curDeptIdx;
+      },
+      set(value) {
+        this.setPaper({
+          key: "curDeptIdx",
+          value
+        });
+      }
     },
     percent() {
       return parseInt(this.curDeptIdx * 100 / this.paper.deptList.length);
@@ -101,7 +121,8 @@ export default {
       if (score == 0) {
         desc[0] = paper.detail[paper.detail.length - 1];
       }
-      return desc[0].content;
+      let data = desc[0];
+      return typeof data != "undefined" ? data.content : "";
     },
     stopList() {
       return this.standardList.map(option => {
@@ -115,22 +136,84 @@ export default {
       this.formItem.score.forEach(item => {
         sum += item;
       });
-      this.autoScore = sum;
+      // this.autoScore = sum;
+      let value = {
+        name: this.curDept.name,
+        value: sum,
+        dept_id: this.curDept.value,
+        score: this.formItem.score
+      };
+      if (this.paper.editModel == "EDIT") {
+        value.id = this.paper.curScore.id;
+      }
+      this.setPaper({
+        key: "curScore",
+        value
+      });
       return sum;
     }
   },
   watch: {
     curDeptIdx(val) {
       this.setCurDept();
+    },
+    "user.uid"(val) {
+      this.getScoreList({
+        task_id: this.curId,
+        uid: this.user.uid
+      });
+    },
+    scoreList(val) {
+      if (this.isNotComplete) {
+        this.curDeptIdx = val.length;
+      }
+    },
+    "paper.curScoreDetail"(val) {
+      let sum = val[0] + val[1] + val[2] + val[3];
+      this.autoScore = sum;
+      this.autoCalcScore(sum);
+      // this.formItem.score = val;
     }
   },
   methods: {
     ...mapMutations(["setPaper"]),
-    submit() {
-      let data = this.formItem;
+    ...mapActions(["getScoreList"]),
+    getFormData() {
+      let score = this.formItem.score;
+      return {
+        db: "db2",
+        tbl: "data_score",
+        task_id: this.paper.curTask.id,
+        uid: this.user.uid,
+        dept_id: this.curDept.value,
+        score_work: score[0],
+        score_team: score[1],
+        score_service: score[2],
+        score_enhance: score[3],
+        score_sub: this.subScore
+      };
+    },
+    submit: async function() {
+      let data = this.getFormData();
+      let method = this.paper.editModel == "NEW" ? "post" : "put";
+      if (method == "put") {
+        data.condition = {
+          id: this.paper.curScore.id
+        };
+      }
+      await axios({ method, data });
+
       this.$Notice.open({
         title: this.dataType,
         desc: JSON.stringify(data)
+      });
+
+      this.refreshChart();
+
+      this.formItem.score = [0, 0, 0, 0];
+      this.setPaper({
+        key: "editModel",
+        value: "NEW"
       });
     },
     autoCalcScore(val) {
@@ -164,10 +247,18 @@ export default {
       if (this.isNotComplete) {
         this.nextDept = this.paper.deptList[this.curDeptIdx + 1].name;
       }
+      this.formItem.dept = this.curDeptIdx;
+    },
+    refreshChart() {
+      this.getScoreList({
+        task_id: this.curId,
+        uid: this.user.uid
+      });
     },
     init() {
       this.loadStandard();
       this.setCurDept();
+      this.refreshChart();
     }
   },
   mounted() {

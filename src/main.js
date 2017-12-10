@@ -7,6 +7,9 @@ import App from './app.vue';
 import '@/locale';
 import 'iview/dist/styles/iview.css';
 
+import ViserVue from 'viser-vue';
+Vue.use(ViserVue);
+
 import VueI18n from 'vue-i18n';
 import util from '@/libs/util';
 

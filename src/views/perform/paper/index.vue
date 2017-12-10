@@ -6,14 +6,16 @@
       <v-grade></v-grade>
       </Col>
       <Col :md="8" :lg="8" :sm="24">
-      <Row>
+      <!-- <Row>
         <Col :span="24">
         <v-panel></v-panel>
         </Col>
         <Col :span="24" class="margin-top-20">
         <v-list></v-list>
         </Col>
-      </Row>
+      </Row> -->
+      <v-panel></v-panel>
+      <v-list class="margin-top-20"></v-list>
       </Col>
     </Row>
   </div>

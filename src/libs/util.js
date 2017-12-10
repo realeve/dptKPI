@@ -249,4 +249,8 @@ util.fullscreenEvent = function(vm) {
     // 全屏相关
 };
 
+util.sleep = async ms => {
+    return new Promise(r => setTimeout(r, ms));
+}
+
 export default util;

@@ -59,6 +59,11 @@ let PAPER = {
         id: 12,
         nonce: 'd91dabea8f',
         cache: CACHE_MAX
+    },
+    scoreList: {
+        id: 13,
+        nonce: 'e7bfeab257',
+        cache: 0
     }
 };
 

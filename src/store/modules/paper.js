@@ -1,12 +1,16 @@
 import { axios, API } from "../../libs/axios";
-
+import _ from 'lodash'
 const paper = {
     state: {
         taskList: [],
         curTask: {},
         deptList: [],
         userList: [],
-        curDeptIdx: 0
+        scoreList: [],
+        curDeptIdx: 0,
+        curScore: {},
+        curScoreDetail: [],
+        editModel: 'NEW'
     },
     mutations: {
         setPaper(state, data) {
@@ -16,7 +20,21 @@ const paper = {
     getters: {
         curDept: (state, getters) => state.deptList[state.curDeptIdx],
         curLeaders: (state, getters) => state.userList.filter(item => item.dept == getters.curDept.value),
-        isNotComplete: (state, getters) => state.curDeptIdx + 1 < state.deptList.length
+        isNotComplete: (state, getters) => state.curDeptIdx + 1 < state.deptList.length,
+        newScoreList: (state, getters) => {
+            let scoreList = _.cloneDeep(state.scoreList);
+            if (state.curScore.value == 0) {
+                return scoreList
+            }
+
+            let idx = scoreList.findIndex(item => item.name == state.curScore.name);
+
+            if (idx > -1) {
+                scoreList.splice(idx, 1);
+            }
+
+            return [...scoreList, state.curScore];
+        }
     },
     actions: {
         getTaskList: async function(contex) {
@@ -45,6 +63,24 @@ const paper = {
             let value = await axios({ params: API.PAPER.userList }).then(res => res.data);
             contex.commit('setPaper', {
                 key: 'userList',
+                value
+            })
+        },
+        getScoreList: async function(contex, setting) {
+            let params = API.PAPER.scoreList;
+            params = Object.assign(params, setting);
+            let data = await axios({ params }).then(res => res.data);
+            let value = data.map(item => {
+                return {
+                    id: item.id,
+                    dept_id: item.dept_id,
+                    name: item.name,
+                    value: item.value,
+                    score: [item.score_enhance, item.score_service, item.score_team, item.score_work]
+                };
+            })
+            contex.commit('setPaper', {
+                key: 'scoreList',
                 value
             })
         }
