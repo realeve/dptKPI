@@ -72,7 +72,23 @@ let PAPER = {
     }
 };
 
+let STATISTIC = {
+    // 本人所在部门的得分统计
+    leaderScore: {
+        id: 15,
+        nonce: '09a7b28c5d',
+        cache: 0
+    }
+};
+
+let USERTYPE = {
+    USER: 2, //普通用户
+    LEADER: 1, // 公司领导
+    CHAIRMAN: 0 // 董事长、总经理、书记
+}
 export default {
     MANAGE,
-    PAPER
+    PAPER,
+    STATISTIC,
+    USERTYPE
 };

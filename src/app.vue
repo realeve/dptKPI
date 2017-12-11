@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -13,11 +13,17 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user", "paper"])
   },
   watch: {
     "user.uid"() {
       this.loadUserInfo();
+    },
+    "paper.taskList"(value) {
+      this.setStatistic({
+        key: "taskList",
+        value: value.filter(item => item.is_start)
+      });
     }
   },
   methods: {
@@ -27,6 +33,7 @@ export default {
       "getUserList",
       "loadUserInfo"
     ]),
+    ...mapMutations(["setStatistic"]),
     init() {
       this.getTaskList();
       this.getDeptList();
