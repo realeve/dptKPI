@@ -203,6 +203,9 @@ export default {
   methods: {
     ...mapMutations(["setPaper"]),
     ...mapActions(["getScoreList"]),
+    notFound() {
+      this.$router.push("/403");
+    },
     getFormData() {
       let score = this.formItem.score;
       return {
