@@ -18,10 +18,17 @@
               <v-slider v-model="formItem.score[idx]" :show-stops="true" :user-stops="stopList[idx]" :show-input="true" :max="item.ratio*10" :tip-format="formatTip" @on-hover="dataChange(idx)" @on-input="dataChange(idx)"></v-slider>
             </FormItem>
             </Col>
+            <Col :span="12">
+            <FormItem label="总分">
+              <v-slider v-model="autoScore" :show-stops="true" :user-stops="[70,80,90]" :show-input="true" @on-change="autoCalcScore"></v-slider>
+            </FormItem>
+            </Col>
+            <Col :span="12" v-show="needRemark">
+            <FormItem :label="`情况说明(${formItem.remark.trim().length}/10)`">
+              <Input v-model.trim="formItem.remark" placeholder="得分低于70分以下时需填写不少于10个字的说明"></Input>
+            </FormItem>
+            </Col>
           </Row>
-          <FormItem label="总分">
-            <v-slider v-model="autoScore" :show-stops="true" :user-stops="[70,80,90]" :show-input="true" @on-change="autoCalcScore"></v-slider>
-          </FormItem>
           <Progress :percent="percent" :stroke-width="1" hide-info></Progress>
 
           <div class="actions">
@@ -32,7 +39,7 @@
                 <span v-else>已完结，点击右侧列表修改评分</span>
               </p>
             </div>
-            <div v-show="subScore>0 && isNotComplete">
+            <div v-show="showSubmit">
               <Button type="primary" class="margin-right-30" @click="submit">提交</Button>
             </div>
           </div>
@@ -58,7 +65,8 @@ export default {
       standardList: [],
       formItem: {
         score: [0, 0, 0, 0],
-        dept: ""
+        dept: "",
+        remark: ""
       },
       curQuestionIdx: 0,
       autoScore: 0,
@@ -154,16 +162,30 @@ export default {
         value
       });
       return sum;
+    },
+    // 需要输入备注
+    needRemark() {
+      return this.subScore < 70;
+    },
+    // 是否可以提交
+    showSubmit() {
+      let handleRemark =
+        (this.needRemark && this.formItem.remark.trim().length > 9) ||
+        !this.needRemark;
+      let handleComplete =
+        this.isNotComplete || (this.editModel == "EDIT" && !this.isNotComplete);
+      let handleScore = this.subScore > 0;
+      return handleRemark && handleComplete && handleScore;
     }
   },
   watch: {
     curDeptIdx(val) {
       this.setCurDept();
     },
-    "user.uid"(val) {
+    "user.id"(val) {
       this.getScoreList({
         task_id: this.curId,
-        uid: this.user.uid
+        uid: this.user.id
       });
     },
     scoreList(val) {
@@ -187,13 +209,14 @@ export default {
         db: "db2",
         tbl: "data_score",
         task_id: this.paper.curTask.id,
-        uid: this.user.uid,
+        uid: this.user.id,
         dept_id: this.curDept.value,
         score_work: score[0],
         score_team: score[1],
         score_service: score[2],
         score_enhance: score[3],
-        score_sub: this.subScore
+        score_sub: this.subScore,
+        remark: this.formItem.remark
       };
     },
     submit: async function() {
@@ -213,7 +236,30 @@ export default {
 
       this.refreshChart();
 
+      // 如果是新增数据，并且评分完毕，则更新用户数
+      if (this.paper.editModel == "NEW" && !this.isNotComplete) {
+        data = {
+          tbl: "data_task",
+          db: "db2",
+          condition: {
+            id: this.paper.curTask.id
+          }
+        };
+        method = "put";
+        if (this.user.userType == 2) {
+          data.complete_user = this.paper.curTask.complete_user + 1;
+        } else {
+          data.complete_leader = this.paper.curTask.complete_leader + 1;
+        }
+        await axios({ method, data });
+        this.$Notice.open({
+          title: "系统提示",
+          desc: "您已完成所有部门评测"
+        });
+      }
+
       this.formItem.score = [0, 0, 0, 0];
+      this.formItem.remark = "";
       this.autoScore = 0;
       this.setPaper({
         key: "editModel",
@@ -259,9 +305,12 @@ export default {
       }
     },
     refreshChart() {
+      if (this.user.id == 0) {
+        return;
+      }
       this.getScoreList({
         task_id: this.curId,
-        uid: this.user.uid
+        uid: this.user.id
       });
     },
     init() {

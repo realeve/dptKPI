@@ -1,10 +1,13 @@
 import Cookies from 'js-cookie';
+import { axios, API } from '../../libs/axios'
 
 const user = {
     state: {
         uid: 0,
         name: '',
-        fullname: ''
+        fullname: '',
+        userType: -1,
+        id: 0
     },
     mutations: {
         logout(state, vm) {
@@ -25,6 +28,27 @@ const user = {
         },
         setUserInfo(state, data) {
             state[data.key] = data.value;
+        }
+    },
+    actions: {
+        loadUserInfo: async function(contex) {
+            let uid = contex.state.uid;
+            if (uid == 0) {
+                return
+            }
+            let params = API.PAPER.userInfo;
+            params.uid = uid;
+            let data = await axios({ params }).then(res => res.data)
+            if (data.length) {
+                contex.commit('setUserInfo', {
+                    key: 'userType',
+                    value: data[0].type_id
+                })
+                contex.commit('setUserInfo', {
+                    key: 'id',
+                    value: data[0].id
+                })
+            }
         }
     }
 };

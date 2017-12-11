@@ -5,19 +5,34 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
       theme: this.$store.state.app.themeColor
     };
   },
+  computed: {
+    ...mapState(["user"])
+  },
+  watch: {
+    "user.uid"() {
+      this.loadUserInfo();
+    }
+  },
   methods: {
-    ...mapActions(["getTaskList", "getDeptList", "getUserList"]),
+    ...mapActions([
+      "getTaskList",
+      "getDeptList",
+      "getUserList",
+      "loadUserInfo"
+    ]),
     init() {
       this.getTaskList();
       this.getDeptList();
       this.getUserList();
+
+      this.loadUserInfo();
     }
   },
   mounted() {

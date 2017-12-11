@@ -50,6 +50,11 @@ let MANAGE = {
 };
 
 let PAPER = {
+    userInfo: {
+        id: 14,
+        nonce: '78473cfd9b',
+        cache: 0
+    },
     depts: {
         id: 11,
         nonce: 'e6d832ad83',

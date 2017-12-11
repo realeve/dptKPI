@@ -94,7 +94,7 @@ export default {
 
       this.chart.on("interval:click", ev => {
         const data = ev.data;
-        console.log(data);
+        // console.log(data);
         if (data) {
           let curId = this.paper.deptList.findIndex(
             item => item.value == data._origin.dept_id
