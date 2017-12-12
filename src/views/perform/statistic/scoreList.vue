@@ -2,7 +2,11 @@
   <Card shadow>
     <p slot="title">
       <Icon type="android-funnel"></Icon>
-      {{statistic.curTask.task_name}}部门得分</p>
+      {{statistic.curTask.task_name}}部门得分
+    </p>
+    <Button type="warning" slot="extra">
+      <Icon type="ios-download-outline"></Icon>
+      导出数据</Button>
     <div ref="chart"></div>
     </div>
   </Card>
@@ -64,7 +68,8 @@ export default {
       this.chart = new G2.Chart({
         container: this.$refs.chart,
         forceFit: true,
-        height: 1000
+        height: 1000,
+        padding: [5, 20, 65, 85]
       });
 
       let dv = this.getDv(this.statistic.scoreList);

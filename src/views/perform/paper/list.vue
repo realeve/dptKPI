@@ -2,7 +2,9 @@
   <Card shadow>
     <p slot="title">
       <Icon type="android-funnel"></Icon>
-      分数排名</p>
+      分数排名
+    </p>
+
     <div ref="chart"></div>
     </div>
   </Card>
@@ -53,7 +55,8 @@ export default {
       this.chart = new G2.Chart({
         container: this.$refs.chart,
         forceFit: true,
-        height: 1000
+        height: 1000,
+        padding: [5, 20, 20, 115]
       });
 
       let dv = this.getDv(this.newScoreList);

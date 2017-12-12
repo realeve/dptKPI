@@ -33,7 +33,7 @@
         </div>
         </Col>
         <Col :span="12">
-        <i-circle :size="210" :trail-width="4" :stroke-width="5" :percent="curDept.score_sub" stroke-linecap="square" stroke-color="#43a3fb">
+        <i-circle :size="230" :trail-width="4" :stroke-width="5" :percent="curDept.score_sub" stroke-linecap="square" stroke-color="#43a3fb">
           <div class="demo-Circle-custom">
             <h1>{{curDept.score_sub}}分
               <small>
@@ -83,7 +83,7 @@ export default {
   .detail {
     margin-top: 10px;
     & p {
-      line-height: 24px;
+      line-height: 28px;
     }
   }
 }
