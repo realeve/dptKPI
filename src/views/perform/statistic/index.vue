@@ -12,7 +12,7 @@
       <Col :md="12" :lg="12" :sm="24">
       <v-histo :title="statistic.curTask.task_name" :data="mainHistoList"></v-histo>
       </Col>
-      <Col :md="24" class="margin-top-10">
+      <Col :md="24" class="margin-top-15">
       <Alert show-icon>
         直方图
         <Icon type="ios-lightbulb-outline" slot="icon"></Icon>
@@ -25,10 +25,10 @@
       <Col :md="12" :lg="12" :sm="24">
       <v-histo title="团队建设" :data="teamHistoList"></v-histo>
       </Col>
-      <Col :md="12" :lg="12" :sm="24" class="margin-top-10">
+      <Col :md="12" :lg="12" :sm="24" class="margin-top-15">
       <v-histo title="服务配合" :data="serviceHistoList"></v-histo>
       </Col>
-      <Col :md="12" :lg="12" :sm="24" class="margin-top-10">
+      <Col :md="12" :lg="12" :sm="24" class="margin-top-15">
       <v-histo title="持续改进" :data="enhanceHistoList"></v-histo>
       </Col>
     </Row>
