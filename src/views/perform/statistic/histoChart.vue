@@ -12,6 +12,7 @@
 import G2 from "@antv/g2";
 import { View } from "@antv/data-set";
 import _ from "lodash";
+import ecStat from "echarts-stat";
 
 export default {
   name: "vhisto",
@@ -32,6 +33,14 @@ export default {
     }
   },
   methods: {
+    getBin(data) {
+      data = data.map(item => item.value);
+      // doc about histogram see here:https://github.com/ecomfe/echarts-stat#histogram
+      // scott | freedmanDiaconis | sturges | none
+      let bin = ecStat.histogram(data);
+      let binItem = bin.data;
+      return binItem[1][0] - binItem[0][0];
+    },
     getDv(data) {
       const dv = new View();
       let value = _.cloneDeep(data);
@@ -42,7 +51,7 @@ export default {
       dv.source(value).transform({
         type: "bin.histogram",
         fields: "value",
-        binWidth: this.title.length > 4 ? 5 : 2,
+        binWidth: this.getBin(value),
         as: ["value", "count"]
       });
       return dv;
