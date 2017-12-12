@@ -4,11 +4,15 @@
     <Col :md="8" :lg="8" :sm="24">
     <v-list></v-list>
     </Col>
+    <Col :md="8" :lg="8" :sm="24">
+    <v-panel></v-panel>
+    </Col>
   </Row>
 </template>
 
 <script>
 import VList from "./scoreList";
+import VPanel from "./panel";
 
 import { axios, API } from "../../../libs/axios";
 
@@ -17,7 +21,8 @@ import { mapState, mapMutations } from "vuex";
 export default {
   name: "home",
   components: {
-    VList
+    VList,
+    VPanel
   },
   computed: {
     ...mapState(["statistic"]),

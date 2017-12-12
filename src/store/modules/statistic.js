@@ -6,17 +6,57 @@ let getUserScore = async setting => {
 
 }
 
+let getLevelByScore = (score, arr) => {
+    let sum = 1;
+    arr.forEach(item => {
+        if (item > score) {
+            sum++
+        }
+    });
+    return sum;
+}
+
 let getLeaderScore = async setting => {
     let params = API.STATISTIC.leaderScore;
     params.taskid = setting.id;
-    return await axios({ params }).then(res => res.data);
+    let data = await axios({ params }).then(res => res.data);
+    let level_list_work = [],
+        level_list_team = [],
+        level_list_service = [],
+        level_list_enhance = [];
+
+    // 获取各子项得分排名
+    let sum = 0;
+    data = data.map((item, i) => {
+        item.level = data.length - i; // 排名
+        sum += item.score_sub;
+        level_list_work.push(item['工作效果']);
+        level_list_team.push(item['团队建设']);
+        level_list_service.push(item['服务配合']);
+        level_list_enhance.push(item['持续改进']);
+        return item;
+    })
+
+    data = data.map(item => {
+        item.score_avg = (sum / data.length).toFixed(2); // 平均得分
+        item.score_percent = (item.score_sub - parseFloat(item.score_avg)).toFixed(2);
+
+        item.level_work = getLevelByScore(item['工作效果'], level_list_work);
+        item.level_team = getLevelByScore(item['团队建设'], level_list_team);
+        item.level_service = getLevelByScore(item['服务配合'], level_list_service);
+        item.level_enhance = getLevelByScore(item['持续改进'], level_list_enhance);
+        return item;
+    })
+    return data;
 }
 
 const paper = {
     state: {
         taskList: [],
         scoreList: [],
-        curTask: {}
+        curTask: {},
+        curDept: {},
+        deptLeaders: []
     },
     mutations: {
         setStatistic(state, data) {
@@ -24,7 +64,6 @@ const paper = {
         }
     },
     getters: {
-
 
     },
     actions: {

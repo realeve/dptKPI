@@ -19,7 +19,7 @@ export default {
     return { chart: {} };
   },
   computed: {
-    ...mapState(["statistic", "user"])
+    ...mapState(["statistic", "user", "paper"])
   },
   watch: {
     "statistic.curTask"(data) {
@@ -39,14 +39,12 @@ export default {
     ...mapActions(["getStaScoreList"]),
     getDv(data) {
       const dv = new View();
-      // let value = _.cloneDeep(data);
-      // value = value.map(item => {
-      //   delete item.leader;
-      //   delete item.dept_id;
-      //   delete item.score_sub;
-      //   return item;
-      // });
-      dv.source(data).transform({
+      let value = _.cloneDeep(data);
+      value = value.map((item, i) => {
+        item.level = data.length - i;
+        return item;
+      });
+      dv.source(value).transform({
         type: "fold",
         fields: ["工作效果", "团队建设", "服务配合", "持续改进"], // 展开字段集
         key: "dept_name", // key字段
@@ -58,6 +56,9 @@ export default {
     refreshChart(data) {
       let dv = this.getDv(data);
       this.chart.changeData(dv);
+    },
+    getLevelByName(name) {
+      this.stat;
     },
     initChart() {
       this.chart = new G2.Chart({
@@ -74,6 +75,8 @@ export default {
         label: {
           offset: 4,
           formatter: val => {
+            let dept = this.statistic.scoreList.find(item => item.dept == val);
+
             let str = val.replace("(", "\n(");
             switch (val) {
               case "钞纸成品制作部":
@@ -89,7 +92,7 @@ export default {
                 str = "离退部";
                 break;
             }
-            return str;
+            return dept.level + "." + str;
           }
         }
       });
@@ -108,7 +111,22 @@ export default {
           let dept = this.statistic.scoreList.find(
             item => item.dept == data._origin.dept
           );
-          this.$Message.success(JSON.stringify(dept));
+
+          this.setStatistic({
+            key: "curDept",
+            value: dept
+          });
+
+          let users = this.paper.userList.filter(
+            item => item.dept == dept.dept_id
+          );
+
+          this.setStatistic({
+            key: "deptLeaders",
+            value: users
+          });
+
+          // this.$Message.success(JSON.stringify(dept));
         }
       });
     }
