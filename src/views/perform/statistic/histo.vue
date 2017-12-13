@@ -119,13 +119,6 @@ export default {
         }
       });
       this.binView.interval().position("value*count");
-      // .tooltip("value*count", (value, count) => {
-      //   return {
-      //     value: value[0] + "至" + value[1],
-      //     count
-      //   };
-      // });
-
       this.lineView.source(option.pdf, {
         value: {
           alias: "得分区间"
@@ -143,6 +136,7 @@ export default {
         .color("#4cca72")
         .tooltip(false);
 
+      this.lineView.axis("value", false);
       this.lineView.axis("pdf", false);
 
       this.chart.render();

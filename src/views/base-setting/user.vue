@@ -13,7 +13,7 @@
 
     <Row :gutter="20">
       <Col span="6" v-for="(item,i) in xUsers" :key="item.id" class="margin-top-20 user-card">
-      <user-card :user="item" @edit="editUser(i)" />
+      <user-card :user="item" @edit="editUser(item.id)" />
       </Col>
     </Row>
 
@@ -118,9 +118,9 @@ export default {
     }
   },
   methods: {
-    editUser(idx) {
+    editUser(uid) {
       this.modal = true;
-      let item = this.userList[idx];
+      let item = this.userList.find(item => item.id == uid);
       this.curIdx = item.id;
       this.curUser = {
         username: item.username,

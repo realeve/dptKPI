@@ -44,7 +44,7 @@ import VHisto from "./histo";
 
 import { axios, API } from "../../../libs/axios";
 
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "home",
@@ -65,37 +65,37 @@ export default {
     },
     // 此处起的5组数据更换为该部门的数据
     mainHistoList() {
-      return this.statistic.scoreList.map(item => {
+      return this.statistic.scoreDetail.map(item => {
         return {
           value: item.score_sub
         };
       });
     },
     workHistoList() {
-      return this.statistic.scoreList.map(item => {
+      return this.statistic.scoreDetail.map(item => {
         return {
-          value: item["工作效果"]
+          value: item.score_work
         };
       });
     },
     teamHistoList() {
-      return this.statistic.scoreList.map(item => {
+      return this.statistic.scoreDetail.map(item => {
         return {
-          value: item["团队建设"]
+          value: item.score_team
         };
       });
     },
     serviceHistoList() {
-      return this.statistic.scoreList.map(item => {
+      return this.statistic.scoreDetail.map(item => {
         return {
-          value: item["服务配合"]
+          value: item.score_service
         };
       });
     },
     enhanceHistoList() {
-      return this.statistic.scoreList.map(item => {
+      return this.statistic.scoreDetail.map(item => {
         return {
-          value: item["持续改进"]
+          value: item.score_enhance
         };
       });
     }
@@ -103,10 +103,14 @@ export default {
   watch: {
     curId(val) {
       this.getCurInfo(val);
+    },
+    "statistic.curDept.dept_id"() {
+      this.getStatScoreDetail();
     }
   },
   methods: {
     ...mapMutations(["setStatistic"]),
+    ...mapActions(["getStatScoreDetail"]),
     notFound() {
       this.$router.push("/403");
     },
