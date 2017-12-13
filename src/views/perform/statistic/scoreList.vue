@@ -4,7 +4,7 @@
       <Icon type="android-funnel"></Icon>
       {{statistic.curTask.task_name}}部门得分
     </p>
-    <Button type="warning" slot="extra">
+    <Button type="warning" slot="extra" @click.prevent="exportData">
       <Icon type="ios-download-outline"></Icon>
       导出数据</Button>
     <div ref="chart"></div>
@@ -101,6 +101,7 @@ export default {
           }
         }
       });
+
       this.chart.coord().transpose();
       this.chart
         .intervalStack()
@@ -134,6 +135,10 @@ export default {
           // this.$Message.success(JSON.stringify(dept));
         }
       });
+    },
+    exportData() {
+      let data = _.cloneDeep(this.statistic.scoreList);
+      console.log(data);
     }
   },
   mounted() {

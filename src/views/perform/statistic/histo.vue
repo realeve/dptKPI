@@ -19,7 +19,13 @@ import { jStat } from "jStat";
 export default {
   name: "vhisto",
   data() {
-    return { chart: {}, isInited: false, binVal: "" };
+    return {
+      chart: {},
+      isInited: false,
+      binVal: "",
+      binView: {},
+      lineView: {}
+    };
   },
   props: {
     title: {
@@ -51,31 +57,37 @@ export default {
       return splitArr.map((x, i) => {
         return {
           value: x,
-          pdf: jStat.normal.pdf(x, mean, std),
-          count: binItem[i][1]
+          pdf: jStat.normal.pdf(x, mean, std)
         };
       });
-      // return binVal;
     },
     getDv(data) {
-      const dv = new View();
+      const bin = new View();
+      const dvLine = new View();
       let value = _.cloneDeep(data);
-      return this.getBin(value);
+      let pdf = this.getBin(value);
 
-      // dv.source(value).transform({
-      //   type: "bin.histogram",
-      //   fields: "value",
-      //   binWidth: this.getBin(value),
-      //   as: ["value", "count"]
-      // });
+      bin.source(value).transform({
+        type: "bin.histogram",
+        fields: "value",
+        binWidth: this.binVal,
+        as: ["value", "count"]
+      });
 
-      // console.log(dv);
-      // return dv;
+      dvLine.source(pdf).transform({
+        type: "fold",
+        fields: ["pdf"], // 展开字段集
+        key: "score", // key字段
+        value: "pdf" // value字段
+      });
+
+      return { bin, pdf: dvLine };
     },
     refreshChart(data) {
       if (this.isInited) {
-        let dv = this.getDv(data);
-        this.chart.changeData(dv);
+        let option = this.getDv(data);
+        this.binView.changeData(option.bin);
+        this.lineView.changeData(option.pdf);
       } else {
         this.initChart();
       }
@@ -87,30 +99,43 @@ export default {
       if (this.data.length == 0) {
         return;
       }
-      let dv = this.getDv(this.data);
-      let width = this.chart._attrs.width;
-      let padding = this.chart._attrs.padding;
-      let len = dv.length;
-      let itemWidth = Math.floor((width - padding[1] - padding[3]) / len);
+      let option = this.getDv(this.data);
 
-      this.chart.tooltip({
-        showTitle: false,
-        itemTpl: "<li>{value}分<br> 出现{count}次</li>"
+      // this.binView.tooltip({
+      //   showTitle: false,
+      //   itemTpl: "<li>{value}分<br> 出现{count}次</li>",
+      //   crosshairs: false,
+      //   inPlot: false,
+      //   position: "top"
+      // });
+
+      this.binView.source(option.bin, {
+        value: {
+          alias: "得分区间"
+        },
+        count: {
+          min: 0,
+          alias: "出现次数"
+        }
+      });
+      this.binView.interval().position("value*count");
+      // .tooltip("value*count", (value, count) => {
+      //   return {
+      //     value: value[0] + "至" + value[1],
+      //     count
+      //   };
+      // });
+
+      this.lineView.source(option.pdf, {
+        value: {
+          alias: "得分区间"
+        },
+        pdf: {
+          min: 0
+        }
       });
 
-      this.chart
-        .interval()
-        .position("value*count")
-        .size(itemWidth)
-        .tooltip("value*count", (value, count) => {
-          let item = this.binVal / 2;
-          return {
-            value: value - item + "至" + (value + item),
-            count
-          };
-        });
-
-      this.chart
+      this.lineView
         .line()
         .position("value*pdf")
         .shape("smooth")
@@ -118,25 +143,8 @@ export default {
         .color("#4cca72")
         .tooltip(false);
 
-      this.chart.tooltip({
-        crosshairs: false,
-        inPlot: false,
-        position: "top"
-      });
+      this.lineView.axis("pdf", false);
 
-      this.chart.source(dv, {
-        value: {
-          alias: "得分区间"
-          // formatter: val => {
-          //   let item = this.binVal / 2;
-          //   return val - item + "至" + (val + item);
-          // }
-        },
-        count: {
-          min: 0,
-          alias: "出现次数"
-        }
-      });
       this.chart.render();
       this.isInited = true;
     }
@@ -148,6 +156,8 @@ export default {
       height: 232,
       padding: [10, 10, 30, 24]
     });
+    this.binView = this.chart.view();
+    this.lineView = this.chart.view();
     this.initChart();
   }
 };

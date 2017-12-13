@@ -39,7 +39,8 @@
 <script>
 import VList from "./scoreList";
 import VPanel from "./panel";
-import VHisto from "./histoChart";
+// import VHisto from "./histoChart";
+import VHisto from "./histo";
 
 import { axios, API } from "../../../libs/axios";
 
