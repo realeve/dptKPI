@@ -3,6 +3,7 @@ import util from "./util";
 let staticPath = util.domain + "/static/data/";
 
 let CACHE_MAX = 60 * 24 * 60;
+let ONE_DAY = 60 * 24;
 
 let MANAGE = {
     // 评分标准
@@ -11,7 +12,7 @@ let MANAGE = {
     userTypeList: {
         id: 4,
         nonce: "dc2861d656",
-        cache: CACHE_MAX
+        cache: ONE_DAY
     },
     deptList: {
         id: 5,
@@ -38,7 +39,7 @@ let MANAGE = {
     leaderList: {
         id: 8,
         nonce: "719f24df9c",
-        cache: CACHE_MAX
+        cache: ONE_DAY
     },
 
     // 任务管理
@@ -58,12 +59,12 @@ let PAPER = {
     depts: {
         id: 11,
         nonce: "e6d832ad83",
-        cache: CACHE_MAX
+        cache: ONE_DAY
     },
     userList: {
         id: 12,
         nonce: "d91dabea8f",
-        cache: CACHE_MAX
+        cache: ONE_DAY
     },
     scoreList: {
         id: 13,
@@ -82,7 +83,7 @@ let STATISTIC = {
     scoreDetail: {
         id: 16,
         nonce: "481b099e41",
-        cache: 10
+        cache: 0
     }
 };
 

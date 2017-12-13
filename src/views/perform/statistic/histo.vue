@@ -147,7 +147,7 @@ export default {
     this.chart = new G2.Chart({
       container: this.$refs.chart,
       forceFit: true,
-      height: 232,
+      height: 200,
       padding: [10, 10, 30, 24]
     });
     this.binView = this.chart.view();

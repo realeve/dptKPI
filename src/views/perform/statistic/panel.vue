@@ -30,10 +30,14 @@
             <i>{{curDept['持续改进']}}分</i> /
             <i>第{{curDept.level_enhance}}名</i>
           </p>
+          <p>得分范围：
+            <i>{{curDept['最低分']}}分</i> 至
+            <i>{{curDept['最高分']}}分</i>
+          </p>
         </div>
         </Col>
         <Col :span="12">
-        <i-circle :size="230" :trail-width="4" :stroke-width="5" :percent="curDept.score_sub" stroke-linecap="square" stroke-color="#43a3fb">
+        <i-circle :size="200" :trail-width="4" :stroke-width="5" :percent="curDept.score_sub" stroke-linecap="square" stroke-color="#43a3fb">
           <div class="demo-Circle-custom">
             <h1>{{curDept.score_sub}}分
               <small>
@@ -83,7 +87,7 @@ export default {
   .detail {
     margin-top: 10px;
     & p {
-      line-height: 28px;
+      line-height: 22px;
     }
   }
 }
@@ -99,11 +103,11 @@ export default {
   & p {
     color: #657180;
     font-size: 14px;
-    margin: 10px 0 15px;
+    margin: 5px 0 5px;
   }
   & span {
     display: block;
-    padding-top: 15px;
+    padding-top: 10px;
     color: #657180;
     font-size: 14px;
     &:before {
@@ -114,7 +118,7 @@ export default {
       margin: 0 auto;
       background: #e0e3e6;
       position: relative;
-      top: -15px;
+      top: -10px;
     }
   }
   & span i {
