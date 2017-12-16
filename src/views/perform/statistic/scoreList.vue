@@ -30,6 +30,8 @@
 <script>
 import BarChart from "./barChart";
 
+import excel from "../../../libs/excel";
+
 import { mapState, mapActions } from "vuex";
 import G2 from "@antv/g2";
 import { View } from "@antv/data-set";
@@ -48,7 +50,41 @@ export default {
   methods: {
     exportData() {
       let data = _.cloneDeep(this.statistic.scoreList);
-      console.log(data);
+      data.sort((b,a)=>a.score_sub-b.score_sub)
+      console.log(data)
+      let header = [
+        "编号",
+        "部门",
+        "分管领导",
+        "工作效果",
+        "团队建设",
+        "服务配合",
+        "持续改进",
+        "最终得分",
+        "最低分",
+        "最高分",
+        "平均分"
+      ];
+      let filename = this.statistic.curTask.task_name;
+      let body = data.map((item,i) => [
+        i+1,
+        item.dept,
+        item.leader,
+        item["工作效果"],
+        item["团队建设"],
+        item["服务配合"],
+        item["持续改进"],
+        item.score_sub,
+        item["最低分"],
+        item["最高分"],
+        parseFloat(item["算术平均分"])
+      ]);
+      let xlsx = new excel({
+        filename,
+        header,
+        body
+      });
+      xlsx.save();
     }
   }
 };
