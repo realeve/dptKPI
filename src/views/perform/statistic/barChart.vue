@@ -21,24 +21,24 @@ export default {
     ...mapState(["statistic", "user", "paper"])
   },
   watch: {
-    "statistic.curTask"(data) {
-      let id = data.id;
-      let user = {
-        id: this.user.id,
-        type_id: this.user.userType
-      };
-      this.getStaScoreList({ id, user });
-    },
     "statistic.scoreList"(data) {
       this.refreshChart(data);
+    },
+    "user.userType"() {
+      this.initChartSetting();
     }
   },
   methods: {
     ...mapMutations(["setStatistic"]),
-    ...mapActions(["getStaScoreList"]),
     getDv(data) {
       const dv = new View();
       let value = _.cloneDeep(data);
+
+      // 如果是公司副总，显示其分管部门的得分
+      if (this.user.userType == 1) {
+        value = value.filter(item => item.leader_uid == this.user.id);
+      }
+
       let key = this.fields[0];
       if (this.fields.length == 1) {
         value = value.sort((a, b) => a[key] - b[key]);
@@ -66,6 +66,18 @@ export default {
     },
     getLevelByName(name) {
       this.stat;
+    },
+    initChartSetting() {
+      if (this.user.userType == -1) {
+        return;
+      }
+      let option = {
+        container: this.$refs.chart,
+        forceFit: true,
+        height: this.user.userType == 1 ? 450 : 830,
+        padding: [5, 20, 65, 85]
+      };
+      this.chart = new G2.Chart(option);
     },
     init() {
       if (this.statistic.scoreList.length == 0) {
@@ -147,13 +159,7 @@ export default {
     }
   },
   mounted() {
-    let option = {
-      container: this.$refs.chart,
-      forceFit: true,
-      height: 830,
-      padding: [5, 20, 65, 85]
-    };
-    this.chart = new G2.Chart(option);
+    this.initChartSetting();
     this.init();
   }
 };

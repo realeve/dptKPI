@@ -32,10 +32,7 @@ import BarChart from "./barChart";
 
 import excel from "../../../libs/excel";
 
-import { mapState, mapActions } from "vuex";
-import G2 from "@antv/g2";
-import { View } from "@antv/data-set";
-import _ from "lodash";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -50,8 +47,7 @@ export default {
   methods: {
     exportData() {
       let data = _.cloneDeep(this.statistic.scoreList);
-      data.sort((b,a)=>a.score_sub-b.score_sub)
-      console.log(data)
+      data.sort((b, a) => a.score_sub - b.score_sub);
       let header = [
         "编号",
         "部门",
@@ -66,8 +62,8 @@ export default {
         "平均分"
       ];
       let filename = this.statistic.curTask.task_name;
-      let body = data.map((item,i) => [
-        i+1,
+      let body = data.map((item, i) => [
+        i + 1,
         item.dept,
         item.leader,
         item["工作效果"],
