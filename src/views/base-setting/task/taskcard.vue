@@ -45,7 +45,10 @@ export default {
   },
   computed: {
     showEdit() {
-      return !this.$route.path.includes("home");
+      return (
+        this.$store.state.user.userType == 3 &&
+        !this.$route.path.includes("home")
+      );
     },
     isStatis() {
       return this.$route.path.includes("statistic");

@@ -228,7 +228,7 @@ export default {
         // 记录当前用户的部门id,如果部门调整时显示原数据
         user_dept_id: this.user.dept_id,
         // 是否是该部门的主管领导，计算分数时系数不同
-        is_manage: this.is_manage
+        is_manage: this.is_manage ? 1 : 0
       };
     },
     submit: async function() {

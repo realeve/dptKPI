@@ -31,7 +31,7 @@ export default {
     }
   },
   watch: {
-    scores(val) {
+    standardList(val) {
       this.init();
     }
   },
@@ -59,6 +59,7 @@ export default {
           this.min = Math.min(this.min, curValue);
           obj[dept.dept] = curValue;
         });
+
         return obj;
       });
 
@@ -74,13 +75,14 @@ export default {
     loadStandard: async function() {
       this.standardList = await axios({
         url: API.MANAGE.standard
-      });
+      }).then(res => res);
     },
     init() {
       if (this.scores.length == 0) {
         return;
       }
       const dv = this.getDV();
+
       const chart = this.chart;
       // console.log(this.min, this.max);
       chart.source(dv, {
