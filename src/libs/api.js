@@ -70,6 +70,11 @@ let PAPER = {
         id: 13,
         nonce: "e7bfeab257",
         cache: 0
+    },
+    historyScoreList: {
+        id: 17,
+        nonce: "d49f6ab566",
+        cache: ONE_DAY
     }
 };
 

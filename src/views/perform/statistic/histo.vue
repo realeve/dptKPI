@@ -84,6 +84,13 @@ export default {
       return { bin, pdf: dvLine };
     },
     refreshChart(data) {
+      if (data.length == 1) {
+        console.log({
+          title: "系统提示",
+          desc: "已完成的评分数据过少，不显示直方图"
+        });
+        return;
+      }
       if (this.isInited) {
         let option = this.getDv(data);
         this.binView.changeData(option.bin);

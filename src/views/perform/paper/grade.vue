@@ -175,6 +175,12 @@ export default {
         this.isNotComplete || (this.editModel == "EDIT" && !this.isNotComplete);
       let handleScore = this.subScore > 0;
       return handleRemark && handleComplete && handleScore;
+    },
+    is_manage() {
+      return (
+        this.user.userType == 0 ||
+        (this.user.userType == 1 && this.curDept.leader == this.user.fullname)
+      );
     }
   },
   watch: {
@@ -218,7 +224,11 @@ export default {
         score_service: score[2],
         score_enhance: score[3],
         score_sub: this.subScore,
-        remark: this.formItem.remark
+        remark: this.formItem.remark,
+        // 记录当前用户的部门id,如果部门调整时显示原数据
+        user_dept_id: this.user.dept_id,
+        // 是否是该部门的主管领导，计算分数时系数不同
+        is_manage: this.is_manage
       };
     },
     submit: async function() {

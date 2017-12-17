@@ -18,7 +18,7 @@ import VList from "./list";
 
 import { axios, API } from "../../../libs/axios";
 
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "home",
@@ -40,11 +40,12 @@ export default {
   },
   watch: {
     curId(val) {
-      this.getCurInfo(val);
+      this.init();
     }
   },
   methods: {
     ...mapMutations(["setPaper"]),
+    ...mapActions(["getHistoryScoreList"]),
     notFound() {
       this.$router.push("/403");
     },
@@ -71,10 +72,14 @@ export default {
         key: "curTask",
         value: curPaper
       });
+    },
+    init() {
+      this.getCurInfo(this.curId);
+      this.getHistoryScoreList(this.curId);
     }
   },
   mounted() {
-    this.getCurInfo(this.curId);
+    this.init();
   }
 };
 </script>

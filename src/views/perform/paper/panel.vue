@@ -10,8 +10,8 @@
         <span v-for="(user,i) in curLeaders" :key="i">{{user.username}}</span>
       </p>
       <div class="score">
-        <p>近期平均得分：</p>
-        <p>近期平均排名：</p>
+        <p>近期平均得分：{{hisScore['总分']}}</p>
+        <p>近期平均排名：{{hisScore.level}}</p>
       </div>
     </div>
   </Card>
@@ -35,6 +35,18 @@ export default {
           value
         });
       }
+    },
+    hisScore() {
+      let data = this.paper.historyScoreList.find(
+        item => item.dept_id == this.paper.deptList[this.curDeptIdx].value
+      );
+      if (typeof data == "undefined") {
+        return {
+          总分: "",
+          level: ""
+        };
+      }
+      return data;
     }
   },
   methods: {

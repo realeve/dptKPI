@@ -165,6 +165,7 @@ export default {
           break;
         default:
           this.statistic.scoreList[this.statistic.scoreList.length - 1];
+          return;
           break;
       }
 
