@@ -44,7 +44,7 @@ export default {
         value = value.sort((a, b) => a[key] - b[key]);
       }
       value = value.map((item, i) => {
-        item.level = data.length - i;
+        item.level = value.length - i;
         return item;
       });
       dv.source(value).transform({
