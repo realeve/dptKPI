@@ -47,6 +47,11 @@ let MANAGE = {
         id: 10,
         nonce: "302ea10d9f",
         cache: 0
+    },
+    resetPsw: {
+        id: 18,
+        nonce: "63bc967cec",
+        cache: 0
     }
 };
 
