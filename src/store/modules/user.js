@@ -41,6 +41,8 @@ const user = {
             params.uid = uid;
             let data = await axios({ params }).then(res => res.data);
             if (data.length) {
+                Cookies.set("access", data[0].type_id == 3 ? 0 : 1);
+
                 contex.commit("setUserInfo", {
                     key: "userType",
                     value: data[0].type_id

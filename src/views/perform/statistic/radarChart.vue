@@ -30,11 +30,11 @@ export default {
       );
     }
   },
-  watch: {
-    standardList(val) {
-      this.init();
-    }
-  },
+  // watch: {
+  //   standardList(val) {
+  //     this.init();
+  //   }
+  // },
   methods: {
     initChartSetting() {
       let option = {
@@ -76,6 +76,8 @@ export default {
       this.standardList = await axios({
         url: API.MANAGE.standard
       }).then(res => res);
+      this.initChartSetting();
+      this.init();
     },
     init() {
       if (this.scores.length == 0) {
@@ -144,8 +146,6 @@ export default {
   },
   mounted() {
     this.loadStandard();
-    this.initChartSetting();
-    this.init();
   }
 };
 </script>

@@ -2,7 +2,7 @@ import { axios, API } from "../../libs/axios";
 import _ from "lodash";
 
 // 普通用户需传入部门id，公司领导传入姓名查询分管部门列表
-let getUserScore = async setting => {};
+// let getUserScore = async setting => {};
 
 let getLevelByScore = (score, arr) => {
     let sum = 1;
@@ -76,15 +76,16 @@ const paper = {
     getters: {},
     actions: {
         getStaScoreList: async function(contex, setting) {
-            let user = setting.user;
-            let value = [];
-            if (user.type_id == API.USERTYPE.USER) {
-                value = await getLeaderScore(setting);
+            // let user = setting.user;
+            // let value = [];
+            // if (user.type_id == API.USERTYPE.USER) {
+            //     value = await getLeaderScore(setting);
 
-                // value = await getUserScore(setting);
-            } else {
-                value = await getLeaderScore(setting);
-            }
+            //     // value = await getUserScore(setting);
+            // } else {
+            //     value = await getLeaderScore(setting);
+            // }
+            let value = await getLeaderScore(setting);
             contex.commit("setStatistic", {
                 key: "scoreList",
                 value
