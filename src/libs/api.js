@@ -52,6 +52,11 @@ let MANAGE = {
         id: 18,
         nonce: "63bc967cec",
         cache: 0
+    },
+    login: {
+        id: 19,
+        nonce: "209a76b78d",
+        cache: 0
     }
 };
 
