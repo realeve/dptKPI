@@ -1,10 +1,11 @@
 
 <template>
   <Row :gutter="10">
-    <Col v-if="user.userType<2" :md="8" :sm="24">
+    <Col v-if="user.userType!=2" :md="8" :sm="24">
     <v-list></v-list>
+    <v-radar v-if="user.userType==1" class="margin-top-15"></v-radar>
     </Col>
-    <Col :md="user.userType<2 ? 16:24">
+    <Col :md="user.userType!=2 ? 16:24">
     <Row>
       <Col :md="12" :sm="24">
       <v-panel></v-panel>
@@ -39,10 +40,11 @@
 
 <script>
 import VList from "./scoreList";
+import VRadar from "./radarChart";
+
 import VPanel from "./panel";
 // import VHisto from "./histoChart";
 import VHisto from "./histo";
-import { axios, API } from "../../../libs/axios";
 
 import { mapState, mapMutations, mapActions } from "vuex";
 
@@ -50,6 +52,7 @@ export default {
   name: "home",
   components: {
     VList,
+    VRadar,
     VPanel,
     VHisto
   },

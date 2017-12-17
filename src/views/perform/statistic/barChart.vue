@@ -74,7 +74,7 @@ export default {
       let option = {
         container: this.$refs.chart,
         forceFit: true,
-        height: this.user.userType == 1 ? 450 : 830,
+        height: this.user.userType == 1 ? 400 : 830,
         padding: [5, 20, 65, 85]
       };
       this.chart = new G2.Chart(option);

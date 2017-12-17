@@ -15,7 +15,7 @@
           <Row :gutter="5">
             <Col :span="12" v-for="(item,idx) in standardList" :key="idx">
             <FormItem :label="item.dimention">
-              <v-slider v-model="formItem.score[idx]" :show-stops="true" :user-stops="stopList[idx]" :show-input="true" :max="item.ratio*10" :tip-format="formatTip" @on-hover="dataChange(idx)" @on-input="dataChange(idx)"></v-slider>
+              <v-slider v-model="formItem.score[idx]" :show-stops="true" :user-stops="stopList[idx]" :show-input="true" :max="item.ratio" :tip-format="formatTip" @on-hover="dataChange(idx)" @on-input="dataChange(idx)"></v-slider>
             </FormItem>
             </Col>
             <Col :span="12">
@@ -123,8 +123,7 @@ export default {
       let paper = this.standardList[this.curQuestionIdx];
       let score = this.formItem.score[this.curQuestionIdx];
       let desc = paper.detail.filter(
-        item =>
-          score <= item.standard.max * 10 && score > item.standard.min * 10
+        item => score <= item.standard.max && score > item.standard.min
       );
       if (score == 0) {
         desc[0] = paper.detail[paper.detail.length - 1];
@@ -134,7 +133,7 @@ export default {
     },
     stopList() {
       return this.standardList.map(option => {
-        let stops = option.detail.map(item => item.standard.min * 10);
+        let stops = option.detail.map(item => item.standard.min);
         stops.pop();
         return stops.sort((a, b) => a - b);
       });
@@ -278,7 +277,7 @@ export default {
       let sum = 0;
       this.formItem.score.forEach((item, i) => {
         if (i < this.formItem.score.length - 1) {
-          let max = this.standardList[i].ratio * 10;
+          let max = this.standardList[i].ratio;
           let newScore = Math.min(max, parseInt(max * percent));
           arr.push(newScore);
           sum += newScore;

@@ -5,10 +5,18 @@
       <span class="sub-title">{{user.pinyin.username_full}}</span>
       <p class="sub-title-dept">{{user.dept_name}}</p>
     </div>
-    <a href="#" slot="extra" @click.prevent="editUser">
-      <Icon type="edit"></Icon>
-      编辑
-    </a>
+
+    <div slot="extra">
+      <a href="#" @click.prevent="editUser">
+        <Icon type="edit"></Icon>
+        编辑
+      </a><br>
+      <a href="#" @click.prevent="editPsw">
+        <Icon type="key"></Icon>
+        修改密码
+      </a>
+    </div>
+
     <ul class="content">
       <li>
         <span>类型</span>
@@ -39,6 +47,9 @@ export default {
   methods: {
     editUser() {
       this.$emit("edit");
+    },
+    editPsw() {
+      this.$emit("psw");
     }
   }
 };

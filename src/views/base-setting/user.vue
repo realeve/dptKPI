@@ -13,7 +13,7 @@
 
     <Row :gutter="20">
       <Col span="6" v-for="(item,i) in xUsers" :key="item.id" class="margin-top-20 user-card">
-      <user-card :user="item" @edit="editUser(item.id)" />
+      <user-card :user="item" @edit="editUser(item.id)" @psw="changePsw(item.id)" />
       </Col>
     </Row>
 
@@ -38,10 +38,18 @@
             <span slot="close">否</span>
           </i-switch>
         </FormItem>
-        <FormItem label="分管部门" v-show="curUser.type_id<2">
+        <FormItem label="分管部门" v-show="curUser.type_id!=2">
           <Select multiple v-model="curUser.depts" style="width:200px">
             <Option v-for="(item,i) in deptList" :value="item.value" :key="i">{{item.name}}</Option>
           </Select>
+        </FormItem>
+      </Form>
+    </Modal>
+
+    <Modal v-model="pswModal" title="调整密码" @on-ok="resetPsw">
+      <Form :label-width="80">
+        <FormItem label="新密码">
+          <Input v-model="curPsw" placeholder="请输入新密码"></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -65,6 +73,8 @@ export default {
   data() {
     return {
       modal: false,
+      pswModal: false,
+      curPsw: "",
       curIdx: 0,
       curUser: {
         username: "",
@@ -97,7 +107,7 @@ export default {
 
         item.depts = [];
 
-        if (item.type_id < 2) {
+        if (item.type_id != 2) {
           item.depts = this.leaderDepts.filter(leader => leader.uid == item.id);
         }
 
@@ -129,7 +139,7 @@ export default {
         depts: [],
         status: item.status == 1 ? true : false
       };
-      if (item.type_id < 2) {
+      if (item.type_id != 2) {
         this.curUser.depts = item.depts.map(item => item.value);
       }
     },
@@ -138,6 +148,30 @@ export default {
       this.curIdx = -1;
       this.curUser.username = "";
       this.curUser.depts = [];
+    },
+    changePsw: async function(id) {
+      this.curIdx = id;
+      this.pswModal = true;
+    },
+    resetPsw: async function() {
+      let data = {
+        // db: "db1",
+        tbl: "sys_user",
+        psw: this.curPsw,
+        condition: {
+          id: this.curIdx
+        }
+      };
+      await axios({
+        method: "put",
+        data
+      }).then(res => {
+        this.$Notice.open({
+          title: "系统提示",
+          desc: "密码修改成功"
+        });
+      });
+      this.curPsw = "";
     },
     edit: async function() {
       let data = JSON.stringify(this.curUser);
@@ -165,6 +199,27 @@ export default {
         });
         return this.curIdx == -1 ? res.id : this.curIdx;
       });
+
+      // 新增用户时，添加数据至系统页面
+      if (this.curIdx == -1) {
+        data = {
+          // db: "db1",
+          tbl: "sys_user",
+          username: this.curUser.username,
+          fullname: this.curUser.username,
+          psw: "111111"
+        };
+        await axios({
+          method: "post",
+          data
+        }).then(res => {
+          this.$Notice.open({
+            title: "系统提示",
+            desc: "新用户密码已被重置为 111111，请修改默认密码."
+          });
+        });
+      }
+
       // 更新领导所管辖部门列表
       if (data.type_id < 2) {
         this.updateManageDepts(uid, manageDepts);
