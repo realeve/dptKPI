@@ -34,6 +34,14 @@
             <i>{{curDept['最低分']}}分</i> 至
             <i>{{curDept['最高分']}}分</i>
           </p>
+          <p>领导评分：
+            <i>{{curDept['领导评分']}}分</i> /
+            <i>第{{curDept.level_leader}}名</i>
+          </p>
+          <p>部门互评：
+            <i>{{curDept['部门互评']}}分</i> /
+            <i>第{{curDept.level_user}}名</i>
+          </p>
         </div>
         </Col>
         <Col :span="12">
@@ -76,16 +84,16 @@ export default {
 <style lang="less" scoped>
 .content {
   & p {
-    line-height: 30px;
+    line-height: 22px;
   }
   .user {
     display: flex;
     flex-direction: row;
     border-bottom: 1px #ddd dashed;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
   }
   .detail {
-    margin-top: 10px;
+    margin-top: 5px;
     & p {
       line-height: 22px;
     }

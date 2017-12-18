@@ -24,13 +24,17 @@ let getLeaderScore = async setting => {
             item["团队建设"] = parseFloat(item["团队建设"]);
             item["服务配合"] = parseFloat(item["服务配合"]);
             item["持续改进"] = parseFloat(item["持续改进"]);
+            item["部门互评"] = parseFloat(item["部门互评"]);
+            item["领导评分"] = parseFloat(item["领导评分"]);
             return item;
         })
     );
     let level_list_work = [],
         level_list_team = [],
         level_list_service = [],
-        level_list_enhance = [];
+        level_list_enhance = [],
+        level_list_leader = [],
+        level_list_user = [];
 
     // 获取各子项得分排名
     let sum = 0;
@@ -41,6 +45,8 @@ let getLeaderScore = async setting => {
         level_list_team.push(item["团队建设"]);
         level_list_service.push(item["服务配合"]);
         level_list_enhance.push(item["持续改进"]);
+        level_list_leader.push(item["领导评分"]);
+        level_list_user.push(item["部门互评"]);
         return item;
     });
 
@@ -54,6 +60,8 @@ let getLeaderScore = async setting => {
         item.level_team = getLevelByScore(item["团队建设"], level_list_team);
         item.level_service = getLevelByScore(item["服务配合"], level_list_service);
         item.level_enhance = getLevelByScore(item["持续改进"], level_list_enhance);
+        item.level_leader = getLevelByScore(item["领导评分"], level_list_leader);
+        item.level_user = getLevelByScore(item["部门互评"], level_list_user);
         return item;
     });
     return data;

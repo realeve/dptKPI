@@ -4,12 +4,18 @@
       <Icon type="android-funnel"></Icon>
       {{statistic.curTask.task_name}}部门得分
     </p>
-    <Button type="warning" slot="extra" @click.prevent="exportData">
+    <Button type="warning" slot="extra" @click.prevent="exportData" v-if="user.userType == 1 || user.userType == 3">
       <Icon type="ios-download-outline"></Icon>
       导出数据</Button>
     <Tabs value="name1">
       <TabPane label="总分" name="name1">
         <bar-chart :fields='["工作效果", "团队建设", "服务配合", "持续改进"]'></bar-chart>
+      </TabPane>
+      <TabPane label="领导评分" name="name7">
+        <bar-chart :fields="['领导评分']"></bar-chart>
+      </TabPane>
+      <TabPane label="部门互评" name="name6">
+        <bar-chart :fields="['部门互评']"></bar-chart>
       </TabPane>
       <TabPane label="工作效果" name="name2">
         <bar-chart :fields="['工作效果']"></bar-chart>
@@ -59,7 +65,9 @@ export default {
         "最终得分",
         "最低分",
         "最高分",
-        "平均分"
+        "平均分",
+        "领导评分",
+        "部门互评"
       ];
       let filename = this.statistic.curTask.task_name;
       let body = data.map((item, i) => [
@@ -73,7 +81,9 @@ export default {
         item.score_sub,
         item["最低分"],
         item["最高分"],
-        parseFloat(item["算术平均分"])
+        parseFloat(item["算术平均分"]),
+        item["领导评分"],
+        item["部门互评"]
       ]);
       let xlsx = new excel({
         filename,
