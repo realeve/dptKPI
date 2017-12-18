@@ -9,7 +9,7 @@
 
    > 后台需同时调整对应 mysql 用户名密码配置：./application/api/database.php 中设置
 
-3. API 管理前台 https://github.com/realeve/api_manager(二次开发时需要)
+3. API 管理前台(二次开发时需要) https://github.com/realeve/api_manager
 4. ./src/libs/util.js 中配置好后台接口地址(ajaxUrl)
 
 ## Install
