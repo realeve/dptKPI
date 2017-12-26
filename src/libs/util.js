@@ -1,31 +1,24 @@
 // import axios from 'axios';
-import env from '../../build/env';
-import semver from 'semver';
-import packjson from '../../package.json';
+import env from "../../build/env";
+import semver from "semver";
+import packjson from "../../package.json";
 
-let util = {
-
-};
+let util = {};
 util.title = function(title) {
-    title = title || '部门履职能力评价';
+    title = title || "部门履职能力评价";
     window.document.title = title;
 };
 
-const domain = 'http://localhost:8080';
+const domain = "http://localhost:8080";
 
-const ajaxUrl = env === 'development' ?
-    'http://localhost:90/api/' :
-    env === 'production' ?
-    domain :
-    'https://debug.url.com';
+const ajaxUrl =
+    env === "development" ?
+    "http://localhost:90/api/" :
+    "http://10.8.1.25:90/api/";
 
 util.domain = domain;
 util.ajaxUrl = ajaxUrl;
-
-// util.ajax = axios.create({
-//     baseURL: ajaxUrl,
-//     timeout: 30000
-// });
+util.ajaxUrl = "http://10.8.1.25:90/api/";
 
 util.inOf = function(arr, targetArr) {
     let res = true;
@@ -46,7 +39,7 @@ util.oneOf = function(ele, targetArr) {
 };
 
 util.showThisRoute = function(itAccess, currentAccess) {
-    if (typeof itAccess === 'object' && Array.isArray(itAccess)) {
+    if (typeof itAccess === "object" && Array.isArray(itAccess)) {
         return util.oneOf(currentAccess, itAccess);
     } else {
         return itAccess === currentAccess;
@@ -72,7 +65,7 @@ util.getRouterObjByName = function(routers, name) {
 };
 
 util.handleTitle = function(vm, item) {
-    if (typeof item.title === 'object') {
+    if (typeof item.title === "object") {
         return vm.$t(item.title.i18n);
     } else {
         return item.title;
@@ -80,13 +73,13 @@ util.handleTitle = function(vm, item) {
 };
 
 util.setCurrentPath = function(vm, name) {
-    let title = '';
+    let title = "";
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
         if (item.children.length === 1) {
             if (item.children[0].name === name) {
                 title = util.handleTitle(vm, item);
-                if (item.name === 'otherRouter') {
+                if (item.name === "otherRouter") {
                     isOtherRouter = true;
                 }
             }
@@ -94,7 +87,7 @@ util.setCurrentPath = function(vm, name) {
             item.children.forEach(child => {
                 if (child.name === name) {
                     title = util.handleTitle(vm, child);
-                    if (item.name === 'otherRouter') {
+                    if (item.name === "otherRouter") {
                         isOtherRouter = true;
                     }
                 }
@@ -102,21 +95,30 @@ util.setCurrentPath = function(vm, name) {
         }
     });
     let currentPathArr = [];
-    if (name === 'home_index') {
+    if (name === "home_index") {
         currentPathArr = [{
-            title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
-            path: '',
-            name: 'home_index'
+            title: util.handleTitle(
+                vm,
+                util.getRouterObjByName(vm.$store.state.app.routers, "home_index")
+            ),
+            path: "",
+            name: "home_index"
         }];
-    } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
+    } else if (
+        (name.indexOf("_index") >= 0 || isOtherRouter) &&
+        name !== "home_index"
+    ) {
         currentPathArr = [{
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
-                path: '/home',
-                name: 'home_index'
+                title: util.handleTitle(
+                    vm,
+                    util.getRouterObjByName(vm.$store.state.app.routers, "home_index")
+                ),
+                path: "/home",
+                name: "home_index"
             },
             {
                 title: title,
-                path: '',
+                path: "",
                 name: name
             }
         ];
@@ -137,47 +139,50 @@ util.setCurrentPath = function(vm, name) {
                 return false;
             }
         })[0];
-        if (currentPathObj.children.length <= 1 && currentPathObj.name === 'home') {
+        if (currentPathObj.children.length <= 1 && currentPathObj.name === "home") {
             currentPathArr = [{
-                title: '首页',
-                path: '',
-                name: 'home_index'
+                title: "首页",
+                path: "",
+                name: "home_index"
             }];
-        } else if (currentPathObj.children.length <= 1 && currentPathObj.name !== 'home') {
+        } else if (
+            currentPathObj.children.length <= 1 &&
+            currentPathObj.name !== "home"
+        ) {
             currentPathArr = [{
-                    title: '首页',
-                    path: '/home',
-                    name: 'home_index'
+                    title: "首页",
+                    path: "/home",
+                    name: "home_index"
                 },
                 {
                     title: currentPathObj.title,
-                    path: '',
+                    path: "",
                     name: name
                 }
             ];
         } else {
-            let childObj = currentPathObj.children.filter((child) => {
+            let childObj = currentPathObj.children.filter(child => {
                 return child.name === name;
             })[0];
             currentPathArr = [{
-                    title: '首页',
-                    path: '/home',
-                    name: 'home_index'
+                    title: "首页",
+                    path: "/home",
+                    name: "home_index"
                 },
                 {
                     title: currentPathObj.title,
-                    path: '',
+                    path: "",
                     name: currentPathObj.name
                 },
                 {
                     title: childObj.title,
-                    path: currentPathObj.path + '/' + childObj.path,
+                    path: currentPathObj.path + "/" + childObj.path,
                     name: name
                 }
             ];
         }
     }
-    vm.$store.commit('setCurrentPath', currentPathArr);
+    vm.$store.commit("setCurrentPath", currentPathArr);
 
     return currentPathArr;
 };
@@ -188,8 +193,9 @@ util.openNewPage = function(vm, name, argu, query) {
     let i = 0;
     let tagHasOpened = false;
     while (i < openedPageLen) {
-        if (name === pageOpenedList[i].name) { // 页面已经打开
-            vm.$store.commit('pageOpenedList', {
+        if (name === pageOpenedList[i].name) {
+            // 页面已经打开
+            vm.$store.commit("pageOpenedList", {
                 index: i,
                 argu: argu,
                 query: query
@@ -200,7 +206,7 @@ util.openNewPage = function(vm, name, argu, query) {
         i++;
     }
     if (!tagHasOpened) {
-        let tag = vm.$store.state.app.tagsList.filter((item) => {
+        let tag = vm.$store.state.app.tagsList.filter(item => {
             if (item.children) {
                 return name === item.children[0].name;
             } else {
@@ -216,10 +222,10 @@ util.openNewPage = function(vm, name, argu, query) {
             if (query) {
                 tag.query = query;
             }
-            vm.$store.commit('increateTag', tag);
+            vm.$store.commit("increateTag", tag);
         }
     }
-    vm.$store.commit('setCurrentPageName', name);
+    vm.$store.commit("setCurrentPageName", name);
 };
 
 util.toDefaultPage = function(routers, name, route, next) {
@@ -227,7 +233,11 @@ util.toDefaultPage = function(routers, name, route, next) {
     let i = 0;
     let notHandle = true;
     while (i < len) {
-        if (routers[i].name === name && routers[i].children && routers[i].redirect === undefined) {
+        if (
+            routers[i].name === name &&
+            routers[i].children &&
+            routers[i].redirect === undefined
+        ) {
             route.replace({
                 name: routers[i].children[0].name
             });
@@ -243,14 +253,14 @@ util.toDefaultPage = function(routers, name, route, next) {
 };
 
 util.fullscreenEvent = function(vm) {
-    vm.$store.commit('initCachepage');
+    vm.$store.commit("initCachepage");
     // 权限菜单过滤相关
-    vm.$store.commit('updateMenulist');
+    vm.$store.commit("updateMenulist");
     // 全屏相关
 };
 
 util.sleep = async ms => {
     return new Promise(r => setTimeout(r, ms));
-}
+};
 
 export default util;

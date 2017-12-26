@@ -17,7 +17,9 @@ export default {
   },
   watch: {
     "user.uid"() {
-      this.loadUserInfo();
+      setTimeout(() => {
+        this.init();
+      }, 100);
     },
     "paper.taskList"(value) {
       this.setStatistic({
@@ -35,6 +37,9 @@ export default {
     ]),
     ...mapMutations(["setStatistic"]),
     init() {
+      if (typeof window._secret == "undefined") {
+        return;
+      }
       this.getTaskList();
       this.getDeptList();
       this.getUserList();
