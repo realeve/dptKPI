@@ -5,6 +5,7 @@
 <script>
 import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
 import G2 from "@antv/g2";
+G2.track(false);
 import { View } from "@antv/data-set";
 import _ from "lodash";
 

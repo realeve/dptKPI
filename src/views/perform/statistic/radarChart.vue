@@ -10,6 +10,7 @@
 <script>
 import { mapState } from "vuex";
 import G2 from "@antv/g2";
+G2.track(false);
 import { DataView } from "@antv/data-set";
 import { axios, API } from "../../../libs/axios";
 

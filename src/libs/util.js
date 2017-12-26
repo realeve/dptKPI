@@ -9,12 +9,13 @@ util.title = function(title) {
     window.document.title = title;
 };
 
-const domain = "http://localhost:8080";
-
 const ajaxUrl =
     env === "development" ?
     "http://localhost:90/api/" :
     "http://10.8.1.25:90/api/";
+
+const domain =
+    env === "development" ? "http://localhost:8080" : "http://10.8.1.25:90";
 
 util.domain = domain;
 util.ajaxUrl = ajaxUrl;
