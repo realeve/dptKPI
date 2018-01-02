@@ -28,6 +28,9 @@ export default {
         key: "taskList",
         value: value.filter(item => item.is_start)
       });
+    },
+    "user.userType"(val) {
+      this.handleDeptList(val);
     }
   },
   methods: {
@@ -38,15 +41,25 @@ export default {
       "loadUserInfo"
     ]),
     ...mapMutations(["setStatistic"]),
-    init() {
+    handleDeptList(userType) {
+      // 部门领导不允许评论本部门数据
+      if (userType != 2) {
+        return;
+      }
+      const idx = this.paper.deptList.findIndex(
+        item => item.value == this.user.dept_id
+      );
+      this.paper.deptList.splice(idx, 1);
+    },
+    init: async function() {
       if (typeof window._secret == "undefined") {
         return;
       }
       this.getTaskList();
-      this.getDeptList();
       this.getUserList();
 
-      this.loadUserInfo();
+      await this.getDeptList();
+      await this.loadUserInfo();
     }
   },
   mounted() {

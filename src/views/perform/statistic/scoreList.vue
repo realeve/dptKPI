@@ -4,7 +4,7 @@
       <Icon type="android-funnel"></Icon>
       {{statistic.curTask.task_name}}部门得分
     </p>
-    <Button type="warning" slot="extra" @click.prevent="exportData" v-if="user.userType == 1 || user.userType == 3">
+    <Button type="warning" slot="extra" @click.prevent="exportData" v-if="user.userType == 0 || user.userType == 3">
       <Icon type="ios-download-outline"></Icon>
       导出数据</Button>
     <Tabs value="name1">
