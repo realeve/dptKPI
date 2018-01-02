@@ -160,6 +160,7 @@ export default {
         key: "curScore",
         value
       });
+      this.autoScore = sum;
       return sum;
     },
     // 需要输入备注
