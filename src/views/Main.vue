@@ -27,7 +27,7 @@
           <zoom-window></zoom-window>
           <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
           <lock-screen></lock-screen>
-          <theme-switch></theme-switch>
+          <!-- <theme-switch></theme-switch> -->
 
           <div class="user-dropdown-menu-con">
             <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
@@ -68,7 +68,7 @@ import tagsPageOpened from "./main-components/tags-page-opened.vue";
 import breadcrumbNav from "./main-components/breadcrumb-nav.vue";
 import fullScreen from "./main-components/fullscreen.vue";
 import lockScreen from "./main-components/lockscreen/lockscreen.vue";
-import themeSwitch from "./main-components/theme-switch/theme-switch.vue";
+// import themeSwitch from "./main-components/theme-switch/theme-switch.vue";
 import zoomWindow from "./main-components/zoom";
 // import Cookies from "js-cookie";s
 import util from "@/libs/util.js";
@@ -82,7 +82,7 @@ export default {
     breadcrumbNav,
     fullScreen,
     lockScreen,
-    themeSwitch,
+    // themeSwitch,
     zoomWindow
   },
   data() {

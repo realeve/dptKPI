@@ -50,7 +50,7 @@ let handleToken = (token, userInfo = false) => {
 };
 
 export let loadUserInfo = function() {
-    if (window.location.hash.includes("login")) {
+    if (window.location.hash.indexOf("login") > -1) {
         return;
     }
 
@@ -80,15 +80,17 @@ export let loadUserInfo = function() {
 // 自动处理token更新，data 序列化等
 export let axios = async option => {
     let user = loadUserInfo();
-    // if (user.token == '') {
+
+    // if (user.token == "") {
     //     user = await refreshNoncer();
     // }
-
-    option = Object.assign(option, {
-        headers: {
-            Authorization: user.token
-        }
-    });
+    if (typeof user != "undefined") {
+        option = Object.assign(option, {
+            headers: {
+                Authorization: user.token
+            }
+        });
+    }
 
     if (typeof option.method == "undefined") {
         option.method = "get";
@@ -113,9 +115,9 @@ export let axios = async option => {
         })
         .catch(res => {
             let req = res.response.request;
-            let errMsg = `${req.status} ${
-        req.statusText
-      }<br>数据读取失败<br>错误原因：${res.response.data.errmsg}`;
+            let errMsg = `${req.status} ${req.statusText},数据读取失败,错误原因：${
+        res.response.data.errmsg
+      }`;
             let data = res.response.data;
             data.status = req.status;
             data.statusText = req.statusText;

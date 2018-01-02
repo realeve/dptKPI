@@ -47,11 +47,14 @@ export default {
     showEdit() {
       return (
         this.$store.state.user.userType == 3 &&
-        !this.$route.path.includes("home")
+        this.$route.path.indexOf("home") == -1
       );
     },
     isStatis() {
-      return this.$route.path.includes("statistic");
+      return (
+        this.$store.state.user.userType == 3
+        // && this.$route.path.indexOf("statistic") > -1
+      );
     }
   },
   methods: {

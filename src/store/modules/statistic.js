@@ -84,15 +84,6 @@ const paper = {
     getters: {},
     actions: {
         getStaScoreList: async function(contex, setting) {
-            // let user = setting.user;
-            // let value = [];
-            // if (user.type_id == API.USERTYPE.USER) {
-            //     value = await getLeaderScore(setting);
-
-            //     // value = await getUserScore(setting);
-            // } else {
-            //     value = await getLeaderScore(setting);
-            // }
             let value = await getLeaderScore(setting);
             contex.commit("setStatistic", {
                 key: "scoreList",

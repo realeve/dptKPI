@@ -4,21 +4,17 @@ import { router } from "./router/index";
 import { appRouter } from "./router/router";
 import store from "./store";
 import App from "./app.vue";
-import "@/locale";
 import "iview/dist/styles/iview.css";
 
-// import ViserVue from 'viser-vue';
-// Vue.use(ViserVue);
-
-import VueI18n from "vue-i18n";
-
-Vue.use(VueI18n);
+import "@/locale";
 Vue.use(iView);
 
 new Vue({
     el: "#app",
-    router: router,
-    store: store,
+    template: "<App/>",
+    components: { App },
+    router,
+    store,
     render: h => h(App),
     data: {
         currentPageName: ""

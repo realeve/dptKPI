@@ -71,7 +71,7 @@ export const otherRouter = {
         },
         {
             path: "setting/standard/:id",
-            title: "评分细则",
+            title: { i18n: "score_detail" },
             name: "setting_score",
             access: 0,
             component: resolve => {
