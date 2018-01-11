@@ -11,7 +11,8 @@ const paper = {
         curScore: {},
         curScoreDetail: [],
         editModel: "NEW",
-        historyScoreList: []
+        historyScoreList: [],
+        completeStatus: []
     },
     mutations: {
         setPaper(state, data) {
@@ -37,6 +38,7 @@ const paper = {
             state.scoreList.length < state.deptList.length,
         newScoreList: (state, getters) => {
             let scoreList = _.cloneDeep(state.scoreList);
+            console.log(scoreList);
             if (state.curScore.value == 0) {
                 return scoreList;
             }
@@ -81,6 +83,21 @@ const paper = {
             );
             contex.commit("setPaper", {
                 key: "userList",
+                value
+            });
+        },
+        getCompleteStatus: async function(contex, task_id) {
+            let params = API.MANAGE.completeStatus;
+            params.task_id = task_id;
+            let value = await axios({ params }).then(res => {
+                return {
+                    body: res.data,
+                    header: res.header,
+                    filename:'活动'+task_id+'完成情况'
+                };
+            });
+            contex.commit("setPaper", {
+                key: "completeStatus",
                 value
             });
         },

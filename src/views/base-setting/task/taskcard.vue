@@ -22,11 +22,11 @@
           <span>用户：{{task.complete_user}} / {{task.count_user}}</span>
         </div>
         <div class="action">
-          <Button v-show="!task.is_end" type="primary" @click="perform" :disabled="task.is_end || !task.is_start">
-            <span v-if="isStatis">查看评分</span>
-            <span v-else>开始评分</span>
+          <Button v-show="!task.is_end && !isManager" type="primary" @click="perform" :disabled="task.is_end || !task.is_start">
+            <span>开始评分</span>
           </Button>
-          <Button v-show="task.is_end" type="primary" @click="showScore">查看评分</Button>
+          <Button v-show="task.is_end || isCBPCLeader || isManager" @click="showScore">查看评分</Button>
+          <Button v-show="isCBPCLeader || isManager" @click="showStatus">完成情况</Button>
         </div>
       </div>
     </div>
@@ -34,6 +34,10 @@
 </template>
 <script>
 import VCard from "../../components/card";
+import excel from "../../../libs/excel";
+
+import { mapState, mapActions } from "vuex";
+
 export default {
   components: {
     VCard
@@ -44,25 +48,31 @@ export default {
     }
   },
   computed: {
+    ...mapState(["paper"]),
     showEdit() {
       return (
         this.$store.state.user.userType == 3 &&
         this.$route.path.indexOf("home") == -1
       );
     },
-    isStatis() {
+    isCBPCLeader() {
+      return this.$store.state.user.userType == 0;
+    },
+    isManager() {
       return (
         this.$store.state.user.userType == 3
+
         // && this.$route.path.indexOf("statistic") > -1
       );
     }
   },
   methods: {
+    ...mapActions(["getCompleteStatus"]),
     edit() {
       this.$emit("edit");
     },
     perform() {
-      if (this.isStatis) {
+      if (this.isManager) {
         this.showScore();
         return;
       }
@@ -70,6 +80,12 @@ export default {
     },
     showScore() {
       this.$router.push("/statistic/" + this.task.id);
+    },
+    showStatus: async function() {
+      await this.getCompleteStatus(this.task.id);
+       let xlsx = new excel(this.paper.completeStatus);
+      xlsx.save();
+      console.log(this.paper.completeStatus);
     }
   }
 };

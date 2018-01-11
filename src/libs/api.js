@@ -57,6 +57,14 @@ let MANAGE = {
         id: 19,
         nonce: "209a76b78d",
         cache: 0
+    },
+
+    // 完成情况
+    completeStatus: {
+        id: 21,
+        nonce: "8b1c3d5e59",
+        cache: 0,
+        mode: "array"
     }
 };
 

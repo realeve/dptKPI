@@ -20,6 +20,10 @@ const domain =
 util.domain = domain;
 util.ajaxUrl = ajaxUrl;
 
+// 连接内网调试
+// util.ajaxUrl = "http://10.8.1.25:90/api/";
+// util.domain = "http://10.8.1.25:90";
+
 util.inOf = function(arr, targetArr) {
     let res = true;
     arr.map(item => {

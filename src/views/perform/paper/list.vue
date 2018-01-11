@@ -6,7 +6,6 @@
     </p>
 
     <div ref="chart"></div>
-    </div>
   </Card>
 </template>
 
