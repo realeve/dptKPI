@@ -118,7 +118,7 @@ export default {
         });
         this.setPaper({
           key: "curScoreDetail",
-          value: item.score
+          value: item.score.reverse()
         });
         this.setPaper({
           key: "editModel",

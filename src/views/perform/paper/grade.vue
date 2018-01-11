@@ -200,10 +200,10 @@ export default {
       }
     },
     "paper.curScoreDetail"(val) {
-      let sum = val[0] + val[1] + val[2] + val[3];
-      this.autoScore = sum;
-      this.autoCalcScore(sum);
-      // this.formItem.score = val;
+      // let sum = val[0] + val[1] + val[2] + val[3];
+      // this.autoScore = sum;
+      // this.autoCalcScore(sum);
+      this.formItem.score = val;
     }
   },
   methods: {

@@ -38,7 +38,6 @@ const paper = {
             state.scoreList.length < state.deptList.length,
         newScoreList: (state, getters) => {
             let scoreList = _.cloneDeep(state.scoreList);
-            console.log(scoreList);
             if (state.curScore.value == 0) {
                 return scoreList;
             }
@@ -93,7 +92,7 @@ const paper = {
                 return {
                     body: res.data,
                     header: res.header,
-                    filename:'活动'+task_id+'完成情况'
+                    filename: "活动" + task_id + "完成情况"
                 };
             });
             contex.commit("setPaper", {

@@ -101,7 +101,6 @@ export default {
           let curId = this.paper.deptList.findIndex(
             item => item.value == data._origin.dept_id
           );
-
           this.setPaper({
             key: "curDeptIdx",
             value: curId
@@ -112,7 +111,7 @@ export default {
           });
           this.setPaper({
             key: "curScoreDetail",
-            value: data._origin.score
+            value: data._origin.score.reverse()
           });
           this.setPaper({
             key: "editModel",
