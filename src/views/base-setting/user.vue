@@ -273,7 +273,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 // @import "../../styles/common.less";
 .user-card {
   cursor: pointer;
@@ -290,6 +290,9 @@ export default {
     .sub-title-dept {
       letter-spacing: 0.5em;
     }
+  }
+  .ivu-card-body {
+    padding: 0 !important;
   }
 }
 </style>
