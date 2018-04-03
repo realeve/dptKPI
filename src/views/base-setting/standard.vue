@@ -39,6 +39,9 @@ export default {
     return {
       taskList: [
         {
+          title: "2018年度部门履职能力评价标准"
+        },
+        {
           title: "2017年度部门履职能力评价标准"
         },
         {
