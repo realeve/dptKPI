@@ -2,10 +2,10 @@ import semver from "semver";
 import packjson from "../../package.json";
 
 const env = process.env.NODE_ENV;
-
+//  const env = "production"; 
 let util = {};
-util.title = function(title) {
-    title = title || "部门履职能力评价";
+util.title = function (title) {
+    title = title || "部门执行力评价";
     window.document.title = title;
 };
 
@@ -15,7 +15,7 @@ const ajaxUrl =
     "http://10.8.1.25:90/api/";
 
 const domain =
-    env === "development" ? "http://localhost:8080" : "http://10.8.1.25:90";
+    env === "development" ? "http://localhost:8000" : "http://10.8.1.25:90";
 
 util.domain = domain;
 util.ajaxUrl = ajaxUrl;
@@ -24,7 +24,7 @@ util.ajaxUrl = ajaxUrl;
 // util.ajaxUrl = "http://10.8.1.25:90/api/";
 // util.domain = "http://10.8.1.25:90";
 
-util.inOf = function(arr, targetArr) {
+util.inOf = function (arr, targetArr) {
     let res = true;
     arr.map(item => {
         if (targetArr.indexOf(item) < 0) {
@@ -34,7 +34,7 @@ util.inOf = function(arr, targetArr) {
     return res;
 };
 
-util.oneOf = function(ele, targetArr) {
+util.oneOf = function (ele, targetArr) {
     if (targetArr.indexOf(ele) >= 0) {
         return true;
     } else {
@@ -42,7 +42,7 @@ util.oneOf = function(ele, targetArr) {
     }
 };
 
-util.showThisRoute = function(itAccess, currentAccess) {
+util.showThisRoute = function (itAccess, currentAccess) {
     if (typeof itAccess === "object" && Array.isArray(itAccess)) {
         return util.oneOf(currentAccess, itAccess);
     } else {
@@ -50,7 +50,7 @@ util.showThisRoute = function(itAccess, currentAccess) {
     }
 };
 
-util.getRouterObjByName = function(routers, name) {
+util.getRouterObjByName = function (routers, name) {
     if (!name || !routers || !routers.length) {
         return null;
     }
@@ -68,7 +68,7 @@ util.getRouterObjByName = function(routers, name) {
     return null;
 };
 
-util.handleTitle = function(vm, item) {
+util.handleTitle = function (vm, item) {
     if (typeof item.title === "object") {
         return vm.$t(item.title.i18n);
     } else {
@@ -76,7 +76,7 @@ util.handleTitle = function(vm, item) {
     }
 };
 
-util.setCurrentPath = function(vm, name) {
+util.setCurrentPath = function (vm, name) {
     let title = "";
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
@@ -191,7 +191,7 @@ util.setCurrentPath = function(vm, name) {
     return currentPathArr;
 };
 
-util.openNewPage = function(vm, name, argu, query) {
+util.openNewPage = function (vm, name, argu, query) {
     let pageOpenedList = vm.$store.state.app.pageOpenedList;
     let openedPageLen = pageOpenedList.length;
     let i = 0;
@@ -232,7 +232,7 @@ util.openNewPage = function(vm, name, argu, query) {
     vm.$store.commit("setCurrentPageName", name);
 };
 
-util.toDefaultPage = function(routers, name, route, next) {
+util.toDefaultPage = function (routers, name, route, next) {
     let len = routers.length;
     let i = 0;
     let notHandle = true;
@@ -256,7 +256,7 @@ util.toDefaultPage = function(routers, name, route, next) {
     }
 };
 
-util.fullscreenEvent = function(vm) {
+util.fullscreenEvent = function (vm) {
     vm.$store.commit("initCachepage");
     // 权限菜单过滤相关
     vm.$store.commit("updateMenulist");

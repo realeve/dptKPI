@@ -63,7 +63,9 @@ export const otherRouter = {
     component: Main,
     children: [{
             path: "home",
-            title: { i18n: "home" },
+            title: {
+                i18n: "home"
+            },
             name: "home_index",
             component: resolve => {
                 require(["@/views/home/home.vue"], resolve);
@@ -71,7 +73,9 @@ export const otherRouter = {
         },
         {
             path: "setting/standard/:id",
-            title: { i18n: "score_detail" },
+            title: {
+                i18n: "score_detail"
+            },
             name: "setting_score",
             access: 0,
             component: resolve => {
@@ -169,7 +173,7 @@ export const appRouter = [{
         component: Main,
         children: [{
                 path: "paper",
-                title: "履职能力评价",
+                title: "执行力评价",
                 name: "perform_paper_list",
                 // 管理员只能查看分数，不允许打分
                 access: 1,

@@ -14,20 +14,20 @@
           </ul>
         </div>
         <div class="detail">
-          <p>工作效果：
-            <i>{{curDept['工作效果']}}分</i> /
+          <p>{{titleList[0]}}：
+            <i>{{curDept[titleList[0]]}}分</i> /
             <i>第{{curDept.level_work}}名</i>
           </p>
-          <p>团队建设：
+          <p>{{titleList[1]}}：
             <i>{{curDept['团队建设']}}分</i> /
             <i>第{{curDept.level_team}}名</i>
           </p>
-          <p>服务配合：
+          <p>{{titleList[2]}}：
             <i>{{curDept['服务配合']}}分</i> /
             <i>第{{curDept.level_service}}名</i>
           </p>
-          <p>持续改进：
-            <i>{{curDept['持续改进']}}分</i> /
+          <p>{{titleList[3]}}：
+            <i>{{curDept[titleList[3]]}}分</i> /
             <i>第{{curDept.level_enhance}}名</i>
           </p>
           <p>得分范围：
@@ -69,6 +69,11 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  props: {
+    titleList: {
+      required: true
+    }
+  },
   data() {
     return {};
   },

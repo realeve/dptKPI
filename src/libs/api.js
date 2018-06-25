@@ -1,6 +1,7 @@
 import util from "./util";
 
 let staticPath = util.domain + "/static/data/";
+// staticPath = "http://localhost:8000/static/data/"
 
 let CACHE_MAX = 60 * 24 * 60;
 let ONE_DAY = 60 * 24;
@@ -8,6 +9,7 @@ let ONE_DAY = 60 * 24;
 let MANAGE = {
     // 评分标准
     standard: staticPath + "standard.json",
+    standard_season: staticPath + "standard_201806.json",
     // 用户管理
     userTypeList: {
         id: 4,

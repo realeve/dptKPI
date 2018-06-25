@@ -5,7 +5,7 @@
       首页
     </div>
     <Row :gutter="20">
-      <Col v-for="(item,i) in statistic.taskList" :key="item.id" :md="8" :lg="6">
+      <Col v-for="item in statistic.taskList" :key="item.id" :md="8" :lg="6">
       <task-card :task="item"></task-card>
       </Col>
     </Row>

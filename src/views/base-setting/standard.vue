@@ -39,13 +39,16 @@ export default {
     return {
       taskList: [
         {
-          title: "2018年度部门履职能力评价标准"
+          title: "2016年度部门执行力评价标准"
         },
         {
-          title: "2017年度部门履职能力评价标准"
+          title: "2017年度部门执行力评价标准"
         },
         {
-          title: "2016年度部门履职能力评价标准"
+          title: "2018年度部门执行力评价标准"
+        },
+        {
+          title: "2018季度部门执行力评价标准"
         }
       ]
     };
@@ -72,8 +75,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// @import "../../styles/common.less";
-
 .detail {
   width: 100%;
   display: flex;

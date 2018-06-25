@@ -32,7 +32,7 @@ export default {
       type: Object,
       default() {
         return {
-          task_name: "2017年部门履职能力评价",
+          task_name: "2017年部门执行力评价",
           start_time: "2017-01-01",
           end_time: "2017-12-11",
           ratio_leader: 0.8,
@@ -77,5 +77,4 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-
 </style>

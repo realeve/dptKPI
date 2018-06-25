@@ -41,8 +41,15 @@ export default {
   },
   methods: {
     loadStandard: async function() {
+      const { id } = this.$route.params;
+      if (id < 3) {
+        this.standardList = await axios({
+          url: API.MANAGE.standard
+        });
+        return;
+      }
       this.standardList = await axios({
-        url: API.MANAGE.standard
+        url: API.MANAGE.standard_season
       });
     },
     getChar(code) {

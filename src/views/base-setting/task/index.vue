@@ -110,7 +110,7 @@ export default {
       }
 
       this.curTask = {
-        task_name: year + "年部门履职能力评价",
+        task_name: year + "年部门执行力评价",
         start_time,
         end_time,
         ratio_leader: 0.8,

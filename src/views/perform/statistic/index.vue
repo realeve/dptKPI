@@ -2,13 +2,13 @@
 <template>
   <Row :gutter="10">
     <Col v-if="user.userType!=2" :md="8" :sm="24">
-    <v-list></v-list>
+    <v-list :titleList="titleList"></v-list>
     <v-radar v-if="user.userType==1" class="margin-top-15"></v-radar>
     </Col>
     <Col :md="user.userType!=2 ? 16:24">
     <Row>
       <Col :md="12" :sm="24">
-      <v-panel></v-panel>
+      <v-panel :titleList="titleList"></v-panel>
       </Col>
       <Col :md="12" :sm="24">
       <v-histo :title="statistic.curTask.task_name" :data="mainHistoList"></v-histo>
@@ -21,16 +21,16 @@
       </Alert>
       </Col>
       <Col :md="12" :sm="24" class="margin-top-5">
-      <v-histo title="工作效果" :data="workHistoList"></v-histo>
+      <v-histo :title="titleList[0]" :data="workHistoList"></v-histo>
       </Col>
       <Col :md="12" :sm="24" class="margin-top-5">
-      <v-histo title="团队建设" :data="teamHistoList"></v-histo>
+      <v-histo :title="titleList[1]" :data="teamHistoList"></v-histo>
       </Col>
       <Col :md="12" :sm="24" class="margin-top-5">
-      <v-histo title="服务配合" :data="serviceHistoList"></v-histo>
+      <v-histo :title="titleList[2]" :data="serviceHistoList"></v-histo>
       </Col>
       <Col :md="12" :sm="24" class="margin-top-5">
-      <v-histo title="持续改进" :data="enhanceHistoList"></v-histo>
+      <v-histo :title="titleList[3]" :data="enhanceHistoList"></v-histo>
       </Col>
     </Row>
     </Col>
@@ -50,6 +50,11 @@ import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "home",
+  data() {
+    return {
+      titleList: ["工作效果", "团队建设", "服务配合", "持续改进"]
+    };
+  },
   components: {
     VList,
     VRadar,
@@ -145,6 +150,12 @@ export default {
         value: curPaper
       });
     },
+    initStandard() {
+      const { id } = this.$route.params;
+      if (id >= 4) {
+        this.titleList = ["工作效果", "工作效率", "工作作风", "持续改进"];
+      }
+    },
     init() {
       if (this.user.dept_id == 0 || this.statistic.scoreList.length == 0) {
         return;
@@ -184,6 +195,7 @@ export default {
   },
   mounted() {
     this.getCurInfo(this.curId);
+    this.initStandard();
     this.init();
   }
 };

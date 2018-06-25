@@ -1,7 +1,7 @@
 {
     "name": "deptkpi",
     "version": "1.0.0",
-    "description": "部门履职能力评价",
+    "description": "部门执行力评价",
     "author": "realeve@qq.com <realeve@qq.com>",
     "private": true,
     "scripts": {

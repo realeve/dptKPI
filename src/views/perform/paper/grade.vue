@@ -302,7 +302,10 @@ export default {
     },
     loadStandard: async function() {
       this.standardList = await axios({
-        url: API.MANAGE.standard
+        url:
+          this.$route.params.id >= 4
+            ? API.MANAGE.standard_season
+            : API.MANAGE.standard
       });
     },
     formatTip(val) {

@@ -9,7 +9,7 @@
       导出数据</Button>
     <Tabs value="name1">
       <TabPane label="总分" name="name1">
-        <bar-chart :fields='["工作效果", "团队建设", "服务配合", "持续改进"]'></bar-chart>
+        <bar-chart :fields='titleList'></bar-chart>
       </TabPane>
       <TabPane label="领导评分" name="name7">
         <bar-chart :fields="['领导评分']"></bar-chart>
@@ -17,17 +17,17 @@
       <TabPane label="部门互评" name="name6">
         <bar-chart :fields="['部门互评']"></bar-chart>
       </TabPane>
-      <TabPane label="工作效果" name="name2">
-        <bar-chart :fields="['工作效果']"></bar-chart>
+      <TabPane :label="titleList[0]" name="name2">
+        <bar-chart :fields="[titleList[0]]"></bar-chart>
       </TabPane>
-      <TabPane label="团队建设" name="name3">
+      <TabPane :label="titleList[1]" name="name3">
         <bar-chart :fields="['团队建设']"></bar-chart>
       </TabPane>
-      <TabPane label="服务配合" name="name4">
+      <TabPane :label="titleList[2]" name="name4">
         <bar-chart :fields="['服务配合']"></bar-chart>
       </TabPane>
-      <TabPane label="持续改进" name="name5">
-        <bar-chart :fields="['持续改进']"></bar-chart>
+      <TabPane :label="titleList[3]" name="name5">
+        <bar-chart :fields="[titleList[3]]"></bar-chart>
       </TabPane>
     </Tabs>
   </Card>
@@ -41,11 +41,16 @@ import excel from "../../../libs/excel";
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    titleList: {
+      required: true
+    }
+  },
   components: {
     BarChart
   },
   data() {
-    return { chart: {} };
+    return { chart: {}, standardId: 0 };
   },
   computed: {
     ...mapState(["statistic", "user", "paper"])
@@ -58,10 +63,7 @@ export default {
         "编号",
         "部门",
         "分管领导",
-        "工作效果",
-        "团队建设",
-        "服务配合",
-        "持续改进",
+        ...titleList,
         "最终得分",
         "最低分",
         "最高分",
@@ -69,6 +71,7 @@ export default {
         "领导评分",
         "部门互评"
       ];
+
       let filename = this.statistic.curTask.task_name;
       let body = data.map((item, i) => [
         i + 1,
@@ -92,6 +95,9 @@ export default {
       });
       xlsx.save();
     }
+  },
+  mounted() {
+    this.standardId = this.$route.params.id;
   }
 };
 </script>
