@@ -8,7 +8,7 @@
       <Card :bordered="false">
         <p slot="title">
           <Icon type="log-in"></Icon>
-          欢迎登录部门履职评价系统
+          欢迎登录部门执行力评价系统
         </p>
         <div class="form-con">
           <Form ref="loginForm" :model="form" :rules="rules">
@@ -49,7 +49,9 @@ export default {
         password: ""
       },
       rules: {
-        userName: [{ required: true, message: "账号不能为空", trigger: "blur" }],
+        userName: [
+          { required: true, message: "账号不能为空", trigger: "blur" }
+        ],
         password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
       }
     };
@@ -108,5 +110,4 @@ export default {
 </script>
 
 <style>
-
 </style>
